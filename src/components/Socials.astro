@@ -1,0 +1,49 @@
+---
+type Props = {
+  className?: string
+}
+const { className = "" } = Astro.props
+---
+
+<div class:list={["flex gap-8", className]}>
+  <a
+    href="https://wa.me/573216105383"
+    title="whatsapp link"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="w-6 h-6">
+      <use xlink:href="/icons/socials.svg#whatsapp"></use>
+    </svg>
+  </a>
+  <a
+    href="https://tiktok.com/@dunor_boutique"
+    title="tiktok link"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="w-6 h-6">
+      <use xlink:href="/icons/socials.svg#tiktok"></use>
+    </svg>
+  </a>
+  <a
+    href="https://www.instagram.com/dunorboutique"
+    title="instagram link"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="w-6 h-6">
+      <use xlink:href="/icons/socials.svg#instagram"></use>
+    </svg>
+  </a>
+  <a
+    href="https://www.facebook.com/dunorboutique"
+    title="facebook link"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="w-6 h-6">
+      <use xlink:href="/icons/socials.svg#facebook"></use>
+    </svg>
+  </a>
+</div>
