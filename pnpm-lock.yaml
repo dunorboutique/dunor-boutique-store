@@ -14,6 +14,9 @@ dependencies:
   '@astrojs/vercel':
     specifier: 7.3.1
     version: 7.3.1(astro@4.4.0)
+  '@cloudinary/url-gen':
+    specifier: 1.16.1
+    version: 1.16.1
   '@supabase/supabase-js':
     specifier: 2.39.6
     version: 2.39.6
@@ -402,6 +405,18 @@ packages:
       '@babel/helper-string-parser': 7.23.4
       '@babel/helper-validator-identifier': 7.22.20
       to-fast-properties: 2.0.0
+    dev: false
+
+  /@cloudinary/transformation-builder-sdk@1.11.0:
+    resolution: {integrity: sha512-BRHcjkMc0zSgyLnYtE+KQG1AyaC2EAHfuGzSJRGiLVsLD8UzLcC8S3GFzzKOPVzGQi0IPm21b1F7M6oqsF8FrQ==}
+    dependencies:
+      '@cloudinary/url-gen': 1.16.1
+    dev: false
+
+  /@cloudinary/url-gen@1.16.1:
+    resolution: {integrity: sha512-lRg0LlRJKrHHhSAedwR7u4YDvPQ2zuyXH3FpmyD8Ki6+/pcRVEJmkokKYnnbRNsu40smXFNJa6IHqjxsfbMmQg==}
+    dependencies:
+      '@cloudinary/transformation-builder-sdk': 1.11.0
     dev: false
 
   /@emmetio/abbreviation@2.3.3:
