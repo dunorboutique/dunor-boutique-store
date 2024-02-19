@@ -1,0 +1,18 @@
+---
+interface Props {
+  href: string
+  type?: "icon" | "slide" | "text"
+  class?: string
+  [key: string]: any
+}
+const { href, type = "text", class: className, ...props } = Astro.props as Props
+const classes = {
+  icon: "p-1 rounded-full hover:bg-white/30",
+  slide: "p-1 capitalize text-3xl",
+  text: "hover:underline"
+}
+---
+
+<a href={href} class:list={[classes[type], className, "transition-colors"]} {...props}>
+  <slot />
+</a>
