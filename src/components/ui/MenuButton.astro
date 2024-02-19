@@ -1,0 +1,64 @@
+---
+const { id } = Astro.props as { id: string }
+---
+
+<div role="button" title="Menu de opciones" id={id} class="container">
+  <input title="menu-checker" type="checkbox" class="checker" />
+  <div class="line edge"></div>
+  <div class="line center"></div>
+  <div class="line center"></div>
+  <div class="line edge"></div>
+</div>
+
+<style>
+  .container {
+    position: relative;
+    width: 20px;
+    aspect-ratio: 1 / 0.9;
+    min-width: 20px;
+    min-height: 18px;
+  }
+
+  .container .checker {
+    position: absolute;
+    top: -5%;
+    left: -5%;
+    width: 100%;
+    height: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    z-index: 1;
+  }
+
+  .container .line {
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: white;
+    transition: transform 0.25s ease-in-out;
+  }
+
+  .container .edge:nth-of-type(4) {
+    bottom: 0;
+  }
+
+  .checker:checked ~ .edge {
+    transform: scaleX(0);
+  }
+
+  .container .center {
+    /* Pixel Perfect Top Aligment */
+    top: calc(50% - 2px * 0.5);
+    transform-origin: center;
+  }
+
+  .checker:checked ~ .center:nth-of-type(2) {
+    transform: rotate(45deg);
+  }
+
+  .checker:checked ~ .center:nth-of-type(3) {
+    transform: rotate(-45deg);
+  }
+</style>
