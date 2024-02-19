@@ -11,7 +11,7 @@ export default {
         xsmall: "512px",
       },
       fontSize: {
-        "3xl": "2rem"
+        "3.5xl": "2rem"
       },
       fontFamily: {
         display: ["Playfair Display", "sans-serif"],
