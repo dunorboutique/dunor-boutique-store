@@ -1,9 +1,78 @@
 ---
 import Layout from "@layouts/Layout.astro"
+import CldImage from "@components/ui/CldImage.astro"
+import ImageSlider from "@components/ImageSlider.astro"
+
+const imageNames = [
+  "Cristhian García",
+  "El Meke",
+  "Fernando Zuluaga",
+  "Joel Carreño",
+  "Jonathan Horn",
+  "Juanda Caribe",
+  "Juan Samper",
+  "Osvaldo Díaz",
+  "Paul Antonio",
+  "Pipe Paez",
+  "Roger",
+  "Sebastucho"
+]
+const homeImages = imageNames.map((name, index) => {
+  const currentIndex = index + 1
+  return {
+    name,
+    src: `dunor/modelo-${currentIndex}`
+  }
+})
 ---
 
-<Layout title="Dunor Boutique">
-  <main>
-    <h1>Dunor Boutique</h1>
+<Layout>
+  <main class="grow flex flex-col justify-between">
+    <!-- Hero Section -->
+    <section class="relative min-h-screen">
+      <div class="absolute inset-0 grid grid-cols-1 w-full md:grid-cols-2">
+        <img
+          class="w-full h-full max-h-screen object-cover object-center"
+          src="/images/index/modelo1.jpg"
+          alt="Modelo 1"
+        />
+        <img
+          class="hidden md:block w-full h-full max-h-screen object-cover object-top-left"
+          src="/images/index/modelo2.jpg"
+          alt="Modelo 2"
+        />
+      </div>
+      <div
+        class="absolute top-1/2 left-1/2 flex flex-col gap-5 w-fit -translate-x-1/2 -translate-y-1/2"
+      >
+        <div class="flex flex-col items-end w-fit font-display">
+          <h1 class="text-6xl xl:text-8xl italic uppercase">Colección</h1>
+          <h2 class="pl-16 text-5xl xl:text-7xl font-bold">lanzamiento</h2>
+        </div>
+        <a
+          href="/store"
+          class="mx-auto py-4 px-24 w-fit bg-neutral-800 rounded text-white text-xl uppercase hover:scale-110 transition-transform"
+          >Ver Colecciones</a
+        >
+      </div>
+    </section>
+
+    <!-- Home Section -->
+    <section class="flex flex-col items-center gap-14 mt-12 py-4 px-14 w-full">
+      <div class="flex flex-col items-end w-fit font-display">
+        <h1 class="text-6xl xl:text-7xl italic uppercase">Dunor</h1>
+        <h2 class="pl-16 text-5xl xl:text-6xl font-bold">style</h2>
+      </div>
+      <ImageSlider images={homeImages} />
+    </section>
+
+    <!-- Home Section -->
+    <section class="flex flex-col items-center gap-14 mt-12 py-4 px-14 w-full">
+      <div class="flex flex-col items-end w-fit font-display">
+        <h1 class="text-6xl xl:text-7xl italic uppercase">Nuestros</h1>
+        <h2 class="pl-16 text-5xl xl:text-6xl font-bold">servicios</h2>
+      </div>
+      <CldImage src="dunor/models_services" alt="Several Models" width={1200} height={400} />
+    </section>
   </main>
 </Layout>
