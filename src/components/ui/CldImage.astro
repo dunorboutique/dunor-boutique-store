@@ -14,14 +14,15 @@ interface Props {
   height: number
   alt: string
   class?: string
+  quality?: string
 }
-const { src, ...props } = Astro.props as Props
+const { src, width, height, quality = "auto", ...props } = Astro.props as Props
 
 const cldSrc = cloudinary
   .image(src)
   .format("auto")
-  .quality("auto")
-  .resize(auto().width(props.width).height(props.height).gravity("auto"))
+  .quality(quality)
+  .resize(auto().width(width).height(height).gravity("auto"))
 if (src.startsWith("http")) cldSrc.setDeliveryType("fetch")
 ---
 
