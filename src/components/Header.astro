@@ -1,0 +1,90 @@
+---
+import { supabase } from "@lib/supabase"
+import MenuButton from "@components/ui/MenuButton.astro"
+import LinkButton from "@components/ui/LinkButton.astro"
+import SidePanel from "@components/ui/SidePanel.astro"
+
+const { data: categories } = (await supabase.from("categories").select("name")) as {
+  data: { name: string }[]
+}
+const relevantPages = [
+  { name: "Inicio", href: "/" },
+  { name: "Tienda", href: "/store" },
+  { name: "Carrito", href: "/cart" },
+  { name: "Servicios", href: "/services" },
+  { name: "Contacto", href: "/contact" }
+]
+---
+
+<header class="sticky top-0 inset-x-0 z-10">
+  <div class="relative flex justify-between items-center py-5 px-6 h-20 bg-dunor-black text-white">
+    <MenuButton id="sidepanel-button" />
+    <SidePanel>
+      {
+        relevantPages.map(({ name, href }) => {
+          return (
+            <LinkButton type="slide" href={href} class="text-neutral-400 hover:text-neutral-100">
+              {name}
+            </LinkButton>
+          )
+        })
+      }
+    </SidePanel>
+
+    <a href="/">
+      <img src="/icons/dunor.svg" alt="DUNOR logo" class="w-36 h-5 sm:w-72 sm:h-10" />
+    </a>
+
+    <div class="flex justify-end items-center gap-4">
+      <LinkButton href="/account" type="icon" title="Ingresar a tu cuenta">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="30"
+          height="30"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          fill="none"
+        >
+          <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"></path>
+          <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
+        </svg>
+      </LinkButton>
+      <div class="hidden">
+        <LinkButton href="/cart" type="icon" title="Verifica tu carrito">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="30"
+            height="30"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            fill="none"
+          >
+            <path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+            <path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"></path>
+            <path d="M17 17h-11v-14h-2"></path>
+            <path d="M6 5l14 1l-1 7h-13"></path>
+          </svg>
+        </LinkButton>
+      </div>
+    </div>
+  </div>
+  <nav class="bg-gray-100 text-gray-500 text-sm font-semibold uppercase">
+    <ul
+      class="grid sm:flex xsmall:grid-cols-3 grid-cols-2 justify-between gap-x-4 gap-y-2 mx-auto py-3 px-8 max-w-4xl"
+    >
+      {
+        categories.map(({ name }) => {
+          return (
+            <li>
+              <LinkButton href={`/categories/${name}`}>
+                {name}
+              </LinkButton>
+            </li>
+          )
+        })
+      }
+    </ul>
+  </nav>
+</header>
