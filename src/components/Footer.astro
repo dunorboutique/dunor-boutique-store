@@ -3,16 +3,16 @@ import Socials from "./Socials.astro"
 ---
 
 <footer
-  class="flex flex-wrap justify-center items-center gap-x-12 gap-y-4 mt-10 py-6 px-8 text-white bg-dunor-black"
+  class="flex flex-wrap justify-center items-center gap-x-12 gap-y-4 py-4 px-8 text-white bg-dunor-black"
 >
   <Socials className="hidden md:flex" />
-  <img src="/icons/shield.svg" class="w-20 sm:w-28 h-20" alt="Dunor Shield logo" />
+  <img src="/icons/shield.svg" class="w-16 sm:w-20" alt="Dunor Shield logo" />
   <div class="flex flex-col items-center gap-4">
     <Socials className="md:hidden" />
     <nav class="flex flex-wrap items-center gap-4 text-lg">
-      <a href="#">English</a>
-      <a href="/services">Servicios</a>
-      <a href="/contact">Contacto</a>
+      <a class="hover:underline" href="#">English</a>
+      <a class="hover:underline" href="/services">Servicios</a>
+      <a class="hover:underline" href="/contact">Contacto</a>
     </nav>
   </div>
 </footer>
