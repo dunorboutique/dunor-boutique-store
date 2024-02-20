@@ -1,6 +1,5 @@
 ---
 import { SITE_TITLE, SITE_DESCRIPTION } from "@consts"
-import { ViewTransitions } from "astro:transitions"
 import Header from "@components/Header.astro"
 import Footer from "@components/Footer.astro"
 
@@ -92,7 +91,6 @@ const currentTitle = title ? `${title} | ${SITE_TITLE}` : SITE_TITLE
     <title>{currentTitle}</title>
     <meta name="title" content={currentTitle} />
     <meta name="description" content={description} />
-    <ViewTransitions />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
