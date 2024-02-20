@@ -6,31 +6,31 @@ import CldImage from "@components/ui/CldImage.astro"
 <Layout title="Servicios">
   <main class="grow flex flex-col items-center gap-10 py-12 px-4 w-full">
     <h1 class="w-fit text-5xl font-medium">Servicios</h1>
-    <div class="flex gap-4 w-full max-w-[50rem]">
-      <div class="flex-1 flex flex-col gap-4 text-end">
+    <div class="flex flex-col xs:flex-row gap-y-20 gap-4 w-full max-w-[50rem]">
+      <div class="flex-1 flex flex-col gap-4 xs:text-end">
         <CldImage
           width={600}
           height={800}
           quality="auto:good"
           src="dunor/modelo-home-2"
           alt="Modelo en Traje Azul"
-          class="w-full h-full object-cover"
+          class="w-full aspect-square xs:aspect-auto xs:h-1/2 object-cover object-[center_10%] rounded-lg"
         />
-        <p class="text-xl leading-normal">
+        <p class="text-xl leading-normal text-pretty">
           Tenemos disponibles trajes en alquiler y en venta. Además, confeccionamos el traje de tus
           sueños con materiales de alta calidad y diseños exclusivos.
         </p>
       </div>
-      <div class="flex-1 flex gap-4 flex-col-reverse text-start">
+      <div class="flex-1 flex flex-col xs:flex-col-reverse justify-end gap-4 text-start">
         <CldImage
           width={600}
           height={800}
           quality="auto:good"
           src="dunor/modelo-home-1"
           alt="Modelo en Traje Blanco"
-          class="w-full h-full object-cover"
+          class="w-full aspect-square xs:aspect-auto xs:h-1/2 object-cover object-[center_30%] rounded-lg"
         />
-        <p class="text-xl leading-normal">
+        <p class="text-xl leading-normal text-pretty">
           Dunor Boutique es una marca centrada en caballeros cuyo objetivo es dotar a sus clientes
           de elegancia, clase y estilo. Nuestros servicios son variados, ya que contamos con un
           stock de trajes, colecciones exclusivas y diseñadores de moda.

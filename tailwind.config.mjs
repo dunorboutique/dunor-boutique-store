@@ -7,8 +7,8 @@ export default {
         "dunor-black": "#212121"
       },
       screens: {
-        "2xsmall": "320px",
-        xsmall: "512px",
+        "2xs": "480px",
+        xs: "512px"
       },
       fontSize: {
         "3.5xl": "2rem"

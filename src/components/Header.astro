@@ -31,36 +31,30 @@ const relevantPages = [
       }
     </SidePanel>
 
-    <a href="/">
-      <img src="/icons/dunor.svg" alt="DUNOR logo" class="w-36 h-5 sm:w-72 sm:h-10" />
+    <a href="/" class="shrink-0">
+      <img src="/icons/dunor.svg" alt="DUNOR logo" class="w-36 h-5 xs:w-72 xs:h-10" />
     </a>
 
-    <div class="flex justify-end items-center gap-4">
+    <div class="flex justify-end items-center gap-4 -mx-2">
       <LinkButton href="/account" type="icon" title="Ingresar a tu cuenta">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="w-7 h-7">
           <use xlink:href="/icons/header.svg#user"></use>
         </svg>
       </LinkButton>
-      <div class="flex">
-        <LinkButton href="/cart" type="icon" title="Verifica tu carrito">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="w-7 h-7">
-            <use xlink:href="/icons/header.svg#cart"></use>
-          </svg>
-        </LinkButton>
-      </div>
+      <LinkButton href="/cart" type="icon" title="Verifica tu carrito" class="hidden xs:block">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="w-7 h-7">
+          <use xlink:href="/icons/header.svg#cart"></use>
+        </svg>
+      </LinkButton>
     </div>
   </div>
   <nav class="bg-gray-100 text-gray-500 text-sm font-semibold uppercase">
-    <ul
-      class="grid sm:flex xsmall:grid-cols-3 grid-cols-2 justify-between gap-x-4 gap-y-2 mx-auto py-3 px-8 max-w-4xl"
-    >
+    <ul class="flex justify-between gap-8 mx-auto py-3 px-8 max-w-4xl overflow-x-auto">
       {
         categories.map(({ name }) => {
           return (
             <li>
-              <LinkButton href={`/categories/${name}`}>
-                {name}
-              </LinkButton>
+              <LinkButton href={`/categories/${name}`}>{name}</LinkButton>
             </li>
           )
         })
