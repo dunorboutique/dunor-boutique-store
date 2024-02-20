@@ -14,9 +14,18 @@ const relevantPages = [
   { name: "Servicios", href: "/services" },
   { name: "Contacto", href: "/contact" }
 ]
+
+interface Props {
+  position?: "normal" | "sticky"
+}
+const headerPosition = {
+  normal: "relative",
+  sticky: "sticky top-0 inset-x-0 z-20"
+}
+const { position = "sticky" } = Astro.props
 ---
 
-<header class="sticky top-0 inset-x-0 z-20">
+<header class:list={[headerPosition[position]]}>
   <div class="relative flex justify-between items-center py-5 px-6 h-20 bg-dunor-black text-white">
     <MenuButton id="sidepanel-button" />
     <SidePanel>
