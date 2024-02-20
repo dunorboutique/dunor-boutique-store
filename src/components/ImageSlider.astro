@@ -113,4 +113,6 @@ const { images } = Astro.props
       slider.style.setProperty("--items-count", `${4}`)
     }
   })
+
+  window.dispatchEvent(new Event("resize"))
 </script>
