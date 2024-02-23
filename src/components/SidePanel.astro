@@ -1,0 +1,53 @@
+---
+import LinkButton from "@components/ui/LinkButton.astro"
+import Socials from "@components/Socials.astro"
+
+const relevantPages = [
+  { name: "Inicio", href: "/" },
+  { name: "Tienda", href: "/store" },
+  { name: "Carrito", href: "/cart" },
+  { name: "Servicios", href: "/services" },
+  { name: "Contacto", href: "/contact" }
+]
+---
+
+<aside
+  id="sidepanel"
+  class="fixed top-16 left-0 py-6 w-0 h-svh bg-dunor-black/90 backdrop-blur-sm overflow-x-hidden z-20 transition-all"
+>
+  <nav class="flex flex-col gap-8 mt-8 px-6">
+    {
+      relevantPages.map(({ name, href }) => {
+        return (
+          <LinkButton type="slide" href={href} class="text-neutral-400 hover:text-neutral-100">
+            {name}
+          </LinkButton>
+        )
+      })
+    }
+  </nav>
+  <Socials className="absolute bottom-32 left-6" />
+</aside>
+
+<script>
+  const sidePanel = document.getElementById("sidepanel")!
+  const sidePanelButton = document.getElementById("sidepanel-button")!
+  let isOpen = false
+
+  sidePanelButton.addEventListener("click", () => {
+    if (isOpen) sidePanel.style.width = "0"
+    else sidePanel.style.width = "18rem"
+    isOpen = !isOpen
+  })
+
+  document.addEventListener("click", (e) => {
+    if (e.target == null) return
+
+    const realTarget = (e.target as HTMLElement).closest("#sidepanel-button")
+    if (isOpen && e.target !== sidePanel && realTarget !== sidePanelButton) {
+      (sidePanelButton.children[0] as HTMLInputElement).checked = false
+      sidePanel.style.width = "0"
+      isOpen = false
+    }
+  })
+</script>

@@ -2,25 +2,18 @@
 import { supabase } from "@lib/supabase"
 import MenuButton from "@components/ui/MenuButton.astro"
 import LinkButton from "@components/ui/LinkButton.astro"
-import SidePanel from "@components/ui/SidePanel.astro"
+import SidePanel from "@components/SidePanel.astro"
 
 const { data: categories } = (await supabase.from("categories").select("name")) as {
   data: { name: string }[]
 }
-const relevantPages = [
-  { name: "Inicio", href: "/" },
-  { name: "Tienda", href: "/store" },
-  { name: "Carrito", href: "/cart" },
-  { name: "Servicios", href: "/services" },
-  { name: "Contacto", href: "/contact" }
-]
-
-interface Props {
-  position?: "normal" | "sticky"
-}
 const headerPosition = {
   normal: "relative",
   sticky: "sticky top-0 inset-x-0 z-20"
+}
+
+interface Props {
+  position?: "normal" | "sticky"
 }
 const { position = "sticky" } = Astro.props
 ---
@@ -28,17 +21,7 @@ const { position = "sticky" } = Astro.props
 <header class:list={[headerPosition[position]]}>
   <div class="relative flex justify-between items-center py-5 px-6 h-20 bg-dunor-black text-white">
     <MenuButton id="sidepanel-button" />
-    <SidePanel>
-      {
-        relevantPages.map(({ name, href }) => {
-          return (
-            <LinkButton type="slide" href={href} class="text-neutral-400 hover:text-neutral-100">
-              {name}
-            </LinkButton>
-          )
-        })
-      }
-    </SidePanel>
+    <SidePanel />
 
     <a href="/" class="shrink-0">
       <img src="/icons/dunor.svg" alt="DUNOR logo" class="w-36 h-5 xs:w-72 xs:h-10" />
