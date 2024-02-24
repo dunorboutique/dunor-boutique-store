@@ -16,6 +16,13 @@ interface Props {
   position?: "normal" | "sticky"
 }
 const { position = "sticky" } = Astro.props
+
+// Check for products in cart
+let productsInCart = 0
+if (Astro.cookies.has("user-cart")) {
+  const cart = Astro.cookies.get("user-cart")?.json() as { id: string }[]
+  productsInCart = cart.length
+}
 ---
 
 <header class:list={[headerPosition[position]]}>
@@ -33,7 +40,10 @@ const { position = "sticky" } = Astro.props
           <use xlink:href="/icons/header.svg#user"></use>
         </svg>
       </LinkButton>
-      <LinkButton href="/cart" type="icon" title="Verifica tu carrito" class="hidden xs:block">
+      <LinkButton href="/checkout/cart" type="icon" title="Verifica tu carrito" class="hidden xs:block relative">
+        <span class="absolute top-0 left-0 flex justify-center items-center size-4 bg-red-500 rounded-full text-white text-xs">
+          {productsInCart}
+        </span>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="w-7 h-7">
           <use xlink:href="/icons/header.svg#cart"></use>
         </svg>
