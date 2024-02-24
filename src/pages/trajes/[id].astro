@@ -1,4 +1,5 @@
 ---
+import type { Product } from "@types"
 import { supabase } from "@lib/supabase"
 import { formatPrice } from "@lib/format"
 import Layout from "@layouts/Layout.astro"
@@ -7,12 +8,7 @@ import CldImage from "@components/ui/CldImage.astro"
 const { id } = Astro.params as { id: string }
 const productId = id.split("-").slice(0, -1).join("-")
 
-type Product = {
-  id: number
-  name: string
-  price: number
-  image_url: string
-}
+// Get product data of specific id
 const { data, error } = (await supabase.from("products").select().eq("id", productId)) as {
   data: Product[] | null
   error: any
@@ -20,11 +16,21 @@ const { data, error } = (await supabase.from("products").select().eq("id", produ
 if (!data || error) return Astro.redirect("/")
 
 const product = data[0]
+
+// Check if product is in cart
+let isProductInCart = false
+if (Astro.cookies.has("user-cart")) {
+  const cart = Astro.cookies.get("user-cart")?.json() as { id: string }[]
+  isProductInCart = cart.some((item: { id: string }) => item.id === productId)
+} else Astro.cookies.set("user-cart", JSON.stringify([]))
 ---
 
 <Layout title={product.name}>
+  <input type="hidden" id="product-id" value={product.id} />
   <main class="grow flex flex-col gap-14 pt-8 pb-32 px-6 xs:px-10">
-    <section class="flex flex-col md:flex-row justify-between gap-10 mx-auto w-full max-w-screen-2xl">
+    <section
+      class="flex flex-col md:flex-row justify-between gap-10 mx-auto w-full max-w-screen-2xl"
+    >
       <!-- Suit Images -->
       <div class="flex flex-col gap-6">
         <!-- <aside class="w-full sm:w-24 h-20 sm:h-full border"></aside> -->
@@ -42,7 +48,9 @@ const product = data[0]
       <article class="flex flex-col gap-8 md:pt-20 w-full max-w-xl">
         <div>
           <h2 class="mb-2 text-neutral-500 font-normal uppercase">Trajes a Medida</h2>
-          <h1 class="flex flex-col xs:flex-row justify-between gap-y-2 text-3xl leading-none font-semibold">
+          <h1
+            class="flex flex-col xs:flex-row justify-between gap-y-2 text-3xl leading-none font-semibold"
+          >
             <span class="max-w-80 text-pretty">
               {product.name}
             </span>
@@ -53,7 +61,9 @@ const product = data[0]
         </div>
         <div class="mb-4 sm:mb-0 flex items-center gap-4">
           <button
-            class="py-3 px-2 xs:px-6 bg-dunor-black border-2 border-dunor-black rounded text-sm xs:text-base text-white hover:bg-dunor-black/80 hover:border-dunor-black/20 transition-colors"
+            id="cart-button"
+            disabled={isProductInCart}
+            class="py-3 px-2 xs:px-6 bg-dunor-black border-2 border-dunor-black rounded text-sm xs:text-base text-white hover:bg-dunor-black/80 hover:border-dunor-black/20 transition-colors disabled:bg-neutral-400 disabled:border-neutral-400 disabled:text-neutral-600 disabled:cursor-not-allowed"
             >Añadir al carrito</button
           >
           <button
@@ -63,7 +73,9 @@ const product = data[0]
         </div>
         <div class="flex flex-col gap-10">
           <details open>
-            <summary class="font-medium uppercase cursor-pointer">Todas las tallas - Hecho a medida</summary>
+            <summary class="font-medium uppercase cursor-pointer"
+              >Todas las tallas - Hecho a medida</summary
+            >
             <p class="mt-2 max-w-prose text-sm text-pretty">
               Todas nuestras prendas son confeccionadas a medida. No tienes que preocuparte por
               acertar la talla, porque no trabajamos con tallas. Simplemente añade el producto que
@@ -122,3 +134,19 @@ const product = data[0]
     </section>
   </main>
 </Layout>
+
+<script>
+  const productId = (document.getElementById("product-id")! as HTMLInputElement).value
+  const cartButton = document.getElementById("cart-button")! as HTMLButtonElement
+  cartButton.addEventListener("click", addToCart)
+
+  function addToCart () {
+    // save to cart using cookies
+    const cart = document.cookie.includes("user-cart")
+      ? JSON.parse(decodeURIComponent(document.cookie).replace(/(?:(?:^|.*;\s*)user-cart\s*\=\s*([^;]*).*$)|^.*$/, "$1"))
+      : []
+    cart.push({ id: productId })
+    document.cookie = `user-cart=${JSON.stringify(cart)}; path=/`
+    cartButton.disabled = true
+  }
+</script>

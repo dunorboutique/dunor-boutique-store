@@ -1,4 +1,5 @@
 ---
+import type { Product } from "@types"
 import { supabase } from "@lib/supabase"
 import { formatPrice, capitalizeText } from "@lib/format"
 import Layout from "@layouts/Layout.astro"
@@ -7,15 +8,7 @@ import CldImage from "@components/ui/CldImage.astro"
 
 const { category } = Astro.params as { category: string }
 
-type Product = {
-  id: number
-  name: string
-  price: number
-  image_url: string
-  category: {
-    name: string
-  }
-}
+// Get products from the selected category
 const { data: products, error } = (await supabase
   .from("products")
   .select("*, category:categories!inner(name)")
