@@ -1,13 +1,11 @@
 ---
 import Layout from "@layouts/Layout.astro"
 import Socials from "@components/Socials.astro"
+import { formatPhoneNumber } from "@lib/format"
 import { SITE_TELEPHONE, SITE_WHATSAPP, SITE_SOCIAL_LINKS } from "@consts"
 
 const telephoneNumber = SITE_TELEPHONE
 const whatsappNumber = SITE_WHATSAPP
-
-const formattedNumber = (phoneNumber: string) =>
-  phoneNumber.replace(/(\d{2})(\d{3})(\d{3})(\d{4})/, "+$1 ($2) $3-$4")
 ---
 
 <Layout title="Contacto">
@@ -39,7 +37,7 @@ const formattedNumber = (phoneNumber: string) =>
         <div>
           <h2 class="text-3xl font-bold">Teléfono:</h2>
           <a href={`tel:+${telephoneNumber}`} title="Telephone Number" class="underline">
-            {formattedNumber(telephoneNumber)}
+            {formatPhoneNumber(telephoneNumber)}
           </a>
         </div>
 
@@ -52,7 +50,7 @@ const formattedNumber = (phoneNumber: string) =>
             rel="noopener noreferrer"
             class="underline"
           >
-            {formattedNumber(whatsappNumber)}
+            {formatPhoneNumber(whatsappNumber)}
           </a>
         </div>
         <Socials size="lg" />
