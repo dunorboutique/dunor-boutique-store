@@ -15,7 +15,7 @@ export default {
       },
       fontFamily: {
         display: ["Playfair Display", "sans-serif"],
-        sans: ["Josefin Sans", "sans-serif"]
+        sans: ["Fira Sans", "sans-serif"]
       }
     }
   },
