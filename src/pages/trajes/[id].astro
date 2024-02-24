@@ -1,0 +1,124 @@
+---
+import { supabase } from "@lib/supabase"
+import { formatPrice } from "@lib/format"
+import Layout from "@layouts/Layout.astro"
+import CldImage from "@components/ui/CldImage.astro"
+
+const { id } = Astro.params as { id: string }
+const productId = id.split("-").slice(0, -1).join("-")
+
+type Product = {
+  id: number
+  name: string
+  price: number
+  image_url: string
+}
+const { data, error } = (await supabase.from("products").select().eq("id", productId)) as {
+  data: Product[] | null
+  error: any
+}
+if (!data || error) return Astro.redirect("/")
+
+const product = data[0]
+---
+
+<Layout title={product.name}>
+  <main class="grow flex flex-col gap-14 pt-8 pb-32 px-6 xs:px-10">
+    <section class="flex flex-col md:flex-row justify-between gap-10 mx-auto w-full max-w-screen-2xl">
+      <!-- Suit Images -->
+      <div class="flex flex-col gap-6">
+        <!-- <aside class="w-full sm:w-24 h-20 sm:h-full border"></aside> -->
+        <picture class="sm:pt-8 lg:p-10 w-full max-w-xl">
+          <CldImage
+            width={810}
+            height={1080}
+            src={product.image_url}
+            alt={product.name}
+            class="w-full aspect-[4/5] object-cover"
+          />
+        </picture>
+      </div>
+      <!-- Suit Details -->
+      <article class="flex flex-col gap-8 md:pt-20 w-full max-w-xl">
+        <div>
+          <h2 class="mb-2 text-neutral-500 font-normal uppercase">Trajes a Medida</h2>
+          <h1 class="flex flex-col xs:flex-row justify-between gap-y-2 text-3xl leading-none font-semibold">
+            <span class="max-w-80 text-pretty">
+              {product.name}
+            </span>
+            <span class="shrink-0 text-2xl xs:text-3xl text-neutral-600 font-normal">
+              {formatPrice(product.price)} COP
+            </span>
+          </h1>
+        </div>
+        <div class="mb-4 sm:mb-0 flex items-center gap-4">
+          <button
+            class="py-3 px-2 xs:px-6 bg-dunor-black border-2 border-dunor-black rounded text-sm xs:text-base text-white hover:bg-dunor-black/80 hover:border-dunor-black/20 transition-colors"
+            >Añadir al carrito</button
+          >
+          <button
+            class="py-3 px-2 xs:px-6 bg-white border-2 border-dunor-black rounded text-sm xs:text-base text-black hover:bg-neutral-200 transition-colors"
+            >Comprar ahora</button
+          >
+        </div>
+        <div class="flex flex-col gap-10">
+          <details open>
+            <summary class="font-medium uppercase cursor-pointer">Todas las tallas - Hecho a medida</summary>
+            <p class="mt-2 max-w-prose text-sm text-pretty">
+              Todas nuestras prendas son confeccionadas a medida. No tienes que preocuparte por
+              acertar la talla, porque no trabajamos con tallas. Simplemente añade el producto que
+              te guste al carrito, y en el siguiente paso te pediremos tus medidas. Verás que es un
+              proceso muy sencillo.
+            </p>
+          </details>
+          <div class="grid grid-cols-3 gap-4 max-w-lg text-center">
+            <p class="flex flex-col items-center gap-2">
+              <span
+                aria-label="Clothes"
+                class="flex justify-center items-center size-12 border-2 border-neutral-400 rounded-full text-neutral-400"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10">
+                  <use xlink:href="/icons/features.svg#clothes"></use>
+                </svg>
+              </span>
+              <span class="text-xs uppercase text-neutral-500 font-medium">Decenas de opciones</span
+              >
+            </p>
+            <p class="flex flex-col items-center gap-2">
+              <span
+                aria-label="Shipping"
+                class="flex justify-center items-center size-12 border-2 border-neutral-400 rounded-full text-neutral-400"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10">
+                  <use xlink:href="/icons/features.svg#shipping"></use>
+                </svg>
+              </span>
+              <span class="text-xs uppercase text-neutral-500 font-medium">Envío gratis</span>
+            </p>
+            <p class="flex flex-col items-center gap-2">
+              <span
+                aria-label="Measures"
+                class="flex justify-center items-center size-12 border-2 border-neutral-400 rounded-full text-neutral-400"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10">
+                  <use xlink:href="/icons/features.svg#ruler"></use>
+                </svg>
+              </span>
+              <span class="text-xs uppercase text-neutral-500 font-medium">Hecho a medida</span>
+            </p>
+          </div>
+          <details>
+            <summary class="font-medium uppercase cursor-pointer">Sobre el traje</summary>
+            <p class="mt-2 max-w-prose text-sm text-pretty">
+              Camisa color hueso confeccionada en lino-algodón fresco, hecha a medida. Saco de
+              patrón de cuadrícula color verde. Elaborado con tejido especialmente tratado para
+              resistir mejor las arrugas. Enamórate de los elegantes detalles de contraste en tejido
+              del saco. Combínalo con uno de nuestros múltiples pantalones para un look más
+              increíble.
+            </p>
+          </details>
+        </div>
+      </article>
+    </section>
+  </main>
+</Layout>
