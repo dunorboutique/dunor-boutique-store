@@ -1,0 +1,56 @@
+---
+
+---
+
+<!-- Filters for products -->
+<aside class="w-full xs:max-w-80">
+  <h2 class="mb-2 text-xl font-medium">Filter by</h2>
+  <form class="flex flex-col gap-5">
+    <label for="category">
+      <span>Category</span>
+      <select
+        name="category"
+        id="category"
+        class="w-full py-2.5 px-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+      >
+        <option value="all">All</option>
+        <option value="clothing">Clothing</option>
+        <option value="shoes">Shoes</option>
+        <option value="accessories">Accessories</option>
+      </select>
+    </label>
+
+    <label for="size">
+      <span>Size</span>
+      <select
+        name="size"
+        id="size"
+        class="w-full py-2.5 px-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+      >
+        <option value="all">All</option>
+        <option value="small">Small</option>
+        <option value="medium">Medium</option>
+        <option value="large">Large</option>
+      </select>
+    </label>
+
+    <label for="color">
+      <span>Color</span>
+      <select
+        name="color"
+        id="color"
+        class="w-full py-2.5 px-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+      >
+        <option value="all">All</option>
+        <option value="red">Red</option>
+        <option value="blue">Blue</option>
+        <option value="green">Green</option>
+      </select>
+    </label>
+    <input
+      type="submit"
+      value="Filter"
+      class="w-full py-2.5 px-1.5 bg-blue-600 text-white rounded-md cursor-pointer"
+    />
+  </form>
+</aside>
