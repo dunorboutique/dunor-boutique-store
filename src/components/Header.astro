@@ -15,14 +15,7 @@ const headerPosition = {
 interface Props {
   position?: "normal" | "sticky"
 }
-const { position = "sticky" } = Astro.props
-
-// Check for products in cart
-let productsInCart = 0
-if (Astro.cookies.has("user-cart")) {
-  const cart = Astro.cookies.get("user-cart")?.json() as { id: string }[]
-  productsInCart = cart.length
-}
+const { position = "sticky" } = Astro.props as Props
 ---
 
 <header class:list={[headerPosition[position]]}>
@@ -40,9 +33,17 @@ if (Astro.cookies.has("user-cart")) {
           <use xlink:href="/icons/header.svg#user"></use>
         </svg>
       </LinkButton>
-      <LinkButton href="/checkout/cart" type="icon" title="Verifica tu carrito" class="hidden xs:block relative">
-        <span class="absolute top-0 left-0 flex justify-center items-center size-4 bg-red-500 rounded-full text-white text-xs">
-          {productsInCart}
+      <LinkButton
+        href="/checkout/cart"
+        type="icon"
+        title="Verifica tu carrito"
+        class="hidden xs:block relative"
+      >
+        <span
+          id="cart-count"
+          class="hidden absolute top-0 left-0 justify-center items-center size-4 bg-red-500 rounded-full text-white text-xs"
+        >
+          0
         </span>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="w-7 h-7">
           <use xlink:href="/icons/header.svg#cart"></use>
@@ -64,3 +65,25 @@ if (Astro.cookies.has("user-cart")) {
     </ul>
   </nav>
 </header>
+
+<script>
+  import { getCart } from "@lib/cart"
+
+  const cartCount = document.getElementById("cart-count")!
+  window.addEventListener("DOMContentLoaded", checkCartCount)
+  window.addEventListener("cart:updated", checkCartCount)
+
+  function checkCartCount() {
+    const cart = getCart()
+    const count = cart.length
+
+    if (count > 0) {
+      cartCount.textContent = count.toString()
+      cartCount.classList.remove("hidden")
+      cartCount.classList.add("flex")
+    } else {
+      cartCount.classList.remove("flex")
+      cartCount.classList.add("hidden")
+    }
+  }
+</script>
