@@ -17,16 +17,20 @@ if (!data || error) return Astro.redirect("/")
 
 const product = data[0]
 
-// Check if product is in cart
-let isProductInCart = false
-if (Astro.cookies.has("user-cart")) {
-  const cart = Astro.cookies.get("user-cart")?.json() as { id: string }[]
-  isProductInCart = cart.some((item: { id: string }) => item.id === productId)
-} else Astro.cookies.set("user-cart", JSON.stringify([]))
+// Set cookie if it doesn't exist
+if (!Astro.cookies.has("user-cart")) {
+  Astro.cookies.set("user-cart", JSON.stringify([]), {
+    path: "/",
+    maxAge: 60 * 60 * 24 * 30,
+    sameSite: "strict",
+    secure: true
+  })
+}
 ---
 
 <Layout title={product.name}>
   <input type="hidden" id="product-id" value={product.id} />
+  <input type="hidden" id="product-price" value={product.price} />
   <main class="grow flex flex-col gap-14 pt-8 pb-32 px-6 xs:px-10">
     <section
       class="flex flex-col md:flex-row justify-between gap-10 mx-auto w-full max-w-screen-2xl"
@@ -62,11 +66,11 @@ if (Astro.cookies.has("user-cart")) {
         <div class="mb-4 sm:mb-0 flex items-center gap-4">
           <button
             id="cart-button"
-            disabled={isProductInCart}
             class="py-3 px-2 xs:px-6 bg-dunor-black border-2 border-dunor-black rounded text-sm xs:text-base text-white hover:bg-dunor-black/80 hover:border-dunor-black/20 transition-colors disabled:bg-neutral-400 disabled:border-neutral-400 disabled:text-neutral-600 disabled:cursor-not-allowed"
             >Añadir al carrito</button
           >
           <button
+            id="buy-button"
             class="py-3 px-2 xs:px-6 bg-white border-2 border-dunor-black rounded text-sm xs:text-base text-black hover:bg-neutral-200 transition-colors"
             >Comprar ahora</button
           >
@@ -136,17 +140,16 @@ if (Astro.cookies.has("user-cart")) {
 </Layout>
 
 <script>
+  import { addItemCart } from "@lib/cart"
   const productId = (document.getElementById("product-id")! as HTMLInputElement).value
-  const cartButton = document.getElementById("cart-button")! as HTMLButtonElement
-  cartButton.addEventListener("click", addToCart)
+  const productPrice = (document.getElementById("product-price")! as HTMLInputElement).value
 
-  function addToCart () {
-    // save to cart using cookies
-    const cart = document.cookie.includes("user-cart")
-      ? JSON.parse(decodeURIComponent(document.cookie).replace(/(?:(?:^|.*;\s*)user-cart\s*\=\s*([^;]*).*$)|^.*$/, "$1"))
-      : []
-    cart.push({ id: productId })
-    document.cookie = `user-cart=${JSON.stringify(cart)}; path=/`
-    cartButton.disabled = true
-  }
+  const cartButton = document.getElementById("cart-button")! as HTMLButtonElement
+  const buyButton = document.getElementById("buy-button")! as HTMLButtonElement
+
+  cartButton.addEventListener("click", () => addItemCart(productId, Number(productPrice)))
+  buyButton.addEventListener("click", () => {
+    addItemCart(productId, Number(productPrice))
+    window.location.href = "/checkout/cart"
+  })
 </script>
