@@ -1,13 +1,15 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "C:/Users/jesuf/CODE/dunor-boutique",
     "paths": {
       "@components/*": ["./src/components/*"],
       "@layouts/*": ["./src/layouts/*"],
       "@lib/*": ["./src/lib/*"],
       "@consts": ["./src/consts.ts"],
-      "@types": ["./src/types.ts"],
-    }
+      "@types": ["./src/types.ts"]
+    },
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact"
   },
   "extends": "astro/tsconfigs/strict"
 }
