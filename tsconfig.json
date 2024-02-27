@@ -5,6 +5,7 @@
       "@components/*": ["./src/components/*"],
       "@layouts/*": ["./src/layouts/*"],
       "@lib/*": ["./src/lib/*"],
+      "@db/*": ["./src/db/*"],
       "@consts": ["./src/consts.ts"],
       "@types": ["./src/types.ts"]
     },
