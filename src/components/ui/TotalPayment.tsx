@@ -24,6 +24,21 @@ export function SubTotal() {
   )
 }
 
+export function ShippingCost({ shippingCost }: { shippingCost: number }) {
+  return (
+    <p class="flex justify-between">
+      Gastos de envío:
+      {shippingCost === 0 ? (
+        <span class="text-green-600 font-medium">¡GRATIS!</span>
+      ) : (
+        <span>
+          ${formatPrice(shippingCost)} <span class="text-sm">COP</span>
+        </span>
+      )}
+    </p>
+  )
+}
+
 export function TotalPayment({ shippingCost }: { shippingCost: number }) {
   const [cartTotal, setCartTotal] = useState(getSubtotal() + shippingCost)
 
