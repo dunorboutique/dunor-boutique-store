@@ -1,21 +1,13 @@
 ---
-import type { Product } from "@types"
-import { supabase } from "@lib/supabase"
+import { getProductsById } from "@db/products"
 import { formatPrice } from "@lib/format"
 import Layout from "@layouts/Layout.astro"
 import CldImage from "@components/ui/CldImage.astro"
 
 const { id } = Astro.params as { id: string }
 const productId = id.split("-").slice(0, -1).join("-")
-
-// Get product data of specific id
-const { data, error } = (await supabase.from("products").select().eq("id", productId)) as {
-  data: Product[] | null
-  error: any
-}
-if (!data || error) return Astro.redirect("/")
-
-const product = data[0]
+const { product, error } = await getProductsById(productId)
+if (product == null || error) return Astro.redirect("/")
 
 // Set cookie if it doesn't exist
 if (!Astro.cookies.has("user-cart")) {

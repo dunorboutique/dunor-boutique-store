@@ -1,23 +1,12 @@
 ---
-import type { Product } from "@types"
-import { supabase } from "@lib/supabase"
+import { getProductsByCategory } from "@db/products"
 import { formatPrice, capitalizeText } from "@lib/format"
 import Layout from "@layouts/Layout.astro"
 import Filters from "@components/Filters.astro"
 import CldImage from "@components/ui/CldImage.astro"
 
 const { category } = Astro.params as { category: string }
-
-// Get products from the selected category
-const { data: products, error } = (await supabase
-  .from("products")
-  .select("*, category:categories!inner(name)")
-  .eq("category.name", category)) as { data: Product[]; error: any }
-
-if (error) {
-  return Astro.redirect(`/categories/${category}`)
-}
-
+const { products, error } = await getProductsByCategory(category)
 const capitalizedTitle = capitalizeText(category)
 ---
 
@@ -57,7 +46,7 @@ const capitalizedTitle = capitalizeText(category)
       <Filters />
       <section class="grow products-grid text-justify">
         {
-          products.map(({ id, name, price, image_url }) => {
+          products?.map(({ id, name, price, image_url }) => {
             const normalizedName = name.toLowerCase().replace(/\s/g, "_")
             return (
               <a href={`/trajes/${id}-${normalizedName}`} class="w-full max-w-72">
@@ -77,6 +66,14 @@ const capitalizedTitle = capitalizeText(category)
               </a>
             )
           })
+        }
+        {
+          error && (
+            <div class="flex items-center justify-center w-full h-96">
+              <h1 class="text-2xl text-red-700">Hubo un error al cargar los productos</h1>
+              <p class="text-lg text-neutral-600">{error.message}</p>
+            </div>
+          )
         }
       </section>
     </div>
