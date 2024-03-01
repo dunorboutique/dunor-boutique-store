@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "C:/Users/jesuf/CODE/dunor-boutique",
+    "baseUrl": ".",
     "paths": {
       "@components/*": ["./src/components/*"],
       "@layouts/*": ["./src/layouts/*"],
