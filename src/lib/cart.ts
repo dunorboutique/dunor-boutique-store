@@ -15,7 +15,6 @@ export function setCart(cart: CartItem[]) {
   document.cookie = `user-cart=${encodeURIComponent(
     JSON.stringify(cart)
   )}; path=/; max-age=2592000; samesite=strict; secure`
-  window.dispatchEvent(new CustomEvent("cart:updated"))
 }
 
 export function getSubtotal() {
@@ -28,6 +27,7 @@ export function setItemQuantity(productId: string, quantity: number) {
   const currentProduct = cart.find(item => item.id === productId)
   if (currentProduct) currentProduct.quantity = quantity
   setCart(cart)
+  window.dispatchEvent(new CustomEvent("cart:updated"))
 }
 
 export function addItemCart(productId: string, productPrice: number) {
@@ -36,10 +36,12 @@ export function addItemCart(productId: string, productPrice: number) {
   if (currentProduct) currentProduct.quantity += 1
   else cart.push({ id: productId, price: productPrice, quantity: 1 } as CartItem)
   setCart(cart)
+  window.dispatchEvent(new CustomEvent("cart:updated"))
 }
 
 export function removeItemCart(productId: string) {
   const cart = getCart()
   const newCart = cart.filter(item => item.id !== productId)
   setCart(newCart)
+  window.dispatchEvent(new CustomEvent("cart:removed"))
 }
