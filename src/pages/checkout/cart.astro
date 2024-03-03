@@ -1,0 +1,133 @@
+---
+import type { CartItem, PartialCartItem } from "@types"
+import { getProductsByIds } from "@db/products"
+import { formatPrice } from "@lib/format"
+import Layout from "@layouts/Layout.astro"
+import CldImage from "@components/ui/CldImage.astro"
+import QuantityPicker from "@components/ui/QuantityPicker"
+import { SubTotal, TotalPayment } from "@components/ui/TotalPayment"
+
+// Check for products in cart
+let cartItems = [] as PartialCartItem[]
+if (Astro.cookies.has("user-cart")) {
+  cartItems = Astro.cookies.get("user-cart")?.json() as PartialCartItem[]
+}
+
+let completeProducts = [] as CartItem[]
+if (cartItems.length > 0) {
+  // Get all products in cart
+  const productIds = cartItems.map(item => item.id)
+  const { products } = await getProductsByIds(productIds)
+  completeProducts =
+    products?.map(product => {
+      // Add quantity to each product
+      const productInCart = cartItems.find(item => item.id === product.id)
+      return { ...product, quantity: productInCart?.quantity ?? 0 }
+    }) ?? []
+}
+---
+
+<Layout title="Mi Carrito">
+  <main class="grow flex flex-col gap-14 pt-8 pb-32 px-6 xs:px-10 bg-neutral-100">
+    <section class="mx-auto w-full max-w-4xl">
+      {
+        completeProducts.length === 0 ? (
+          <div class="flex flex-col items-center gap-6 mt-20">
+            <h1 class="text-4xl text-center text-balance font-medium">No hay productos en tu carrito</h1>
+            <p class="text-xl">
+              Añade productos a tu carrito y los verás aquí
+            </p>
+            <a
+              href="/store"
+              class="py-3 px-2 xs:px-6 w-fit bg-dunor-black border-2 border-dunor-black rounded text-sm xs:text-base text-white text-center hover:bg-dunor-black/80 hover:border-dunor-black/20 transition-colors"
+            >
+              Ver productos
+            </a>
+          </div>
+        ) : (
+          <>
+            <h1 class="mb-6 text-4xl">Mi Carrito</h1>
+            <div class="flex gap-10">
+              <div class="flex flex-col gap-4 w-full">
+                {
+                  completeProducts.map(product => (
+                    <div class="flex gap-6 py-6 px-8 bg-white rounded-md">
+                      <CldImage
+                        src={product.image_url}
+                        alt={product.name}
+                        width={200}
+                        height={300}
+                        class="w-28 aspect-[4/5] rounded"
+                      />
+                      <div class="flex flex-col justify-between">
+                        <header class="flex flex-col gap-2">
+                          <h2 class="text-xl">{product.name}</h2>
+                          <p class="text-neutral-500">{formatPrice(product.price)} COP</p>
+                        </header>
+                        <footer class="flex gap-6 text-sm">
+                          <QuantityPicker
+                            client:load
+                            productId={product.id}
+                            initialAmount={product.quantity}
+                          />
+                          <button
+                            id="delete-item"
+                            data-product-id={product.id}
+                            class="text-red-500 hover:underline"
+                          >
+                            Eliminar
+                          </button>
+                        </footer>
+                      </div>
+                    </div>
+                  ))
+                }
+              </div>
+              <div class="flex flex-col gap-10 w-full max-w-80">
+                <p class="text-center">
+                  <span class="text-green-600">Este pedido tiene gastos de envío GRATIS</span>
+                  <span class="text-sm">Pide hoy y recíbelo en 3 semanas</span>
+                </p>
+                <div class="flex flex-col gap-1">
+                  <p class="flex justify-between">
+                    Subtotal:
+                    <SubTotal client:only />
+                  </p>
+                  <p class="flex justify-between mt-2 text-xl">
+                    Total
+                    <TotalPayment client:only shippingCost={0} />
+                  </p>
+                </div>
+                <a
+                  href="measures"
+                  class="py-3 px-2 xs:px-6 bg-dunor-black border-2 border-dunor-black rounded text-sm xs:text-base text-white text-center hover:bg-dunor-black/80 hover:border-dunor-black/20 transition-colors"
+                >
+                  Medidas y Finalizar
+                </a>
+              </div>
+            </div>
+          </>
+        )
+      }
+    </section>
+  </main>
+</Layout>
+
+<script>
+  import { removeItemCart } from "@lib/cart"
+
+  const deleteItemButtons = document.querySelectorAll("#delete-item")
+  deleteItemButtons.forEach(button => {
+    button.addEventListener("click", deleteItem)
+  })
+
+  function deleteItem(event: Event) {
+    const button = event.target as HTMLButtonElement
+    const productId = button.dataset.productId!
+    removeItemCart(productId)
+  }
+
+  window.addEventListener("cart:removed", () => {
+    window.location.reload()
+  })
+</script>
