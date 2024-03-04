@@ -7,6 +7,8 @@ interface ImportMetaEnv {
   readonly CLOUDINARY_CLOUD_NAME: string
   readonly CLOUDINARY_API_KEY: string
   readonly CLOUDINARY_API_SECRET: string
+  readonly BODYGRAM_API_KEY: string
+  readonly BODYGRAM_ORGANIZATION_ID: string
 }
 
 interface ImportMeta {
