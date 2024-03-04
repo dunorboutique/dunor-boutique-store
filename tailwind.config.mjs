@@ -4,7 +4,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        "dunor-black": "#212121"
+        "dunor-black": "#212121",
+        "dunor-gold": "#bf9540"
       },
       screens: {
         "2xs": "480px",
