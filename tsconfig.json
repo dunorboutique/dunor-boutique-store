@@ -7,6 +7,7 @@
       "@lib/*": ["./src/lib/*"],
       "@db/*": ["./src/db/*"],
       "@ui/*": ["./src/components/ui/*"],
+      "@icons/*": ["./src/components/icons/*"],
       "@hooks": ["./src/hooks/index.ts"],
       "@consts": ["./src/consts.ts"],
       "@types": ["./src/types.ts"]
