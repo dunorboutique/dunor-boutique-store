@@ -10,6 +10,13 @@ export const formatPrice = (price: number) =>
 export const formatPhoneNumber = (phoneNumber: string) =>
   phoneNumber.replace(/(\d{2})(\d{3})(\d{3})(\d{4})/, "+$1 ($2) $3-$4")
 
+export const formatTime = (time: number) =>
+  Intl.DateTimeFormat(undefined, {
+    year: "numeric",
+    month: "short",
+    day: "2-digit"
+  }).format(new Date(time * 1000))
+
 export function fileToBase64(file: File) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
@@ -21,6 +28,6 @@ export function fileToBase64(file: File) {
       }
       resolve(encoded)
     }
-    reader.onerror = (error) => reject(error)
+    reader.onerror = error => reject(error)
   })
 }
