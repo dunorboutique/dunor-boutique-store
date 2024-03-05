@@ -1,13 +1,7 @@
-import { useState, useEffect } from "preact/hooks"
+import { useState } from "preact/hooks"
+import { useEvent } from "@hooks"
 import { getSubtotal } from "@lib/cart"
 import { formatPrice } from "@lib/format"
-
-function useEvent(event: string, callback: EventListener) {
-  useEffect(() => {
-    window.addEventListener(event, callback)
-    return () => window.removeEventListener(event, callback)
-  }, [event, callback])
-}
 
 export function SubTotal() {
   const [cartSubtotal, setCartSubtotal] = useState(getSubtotal())
