@@ -1,6 +1,11 @@
 import type { Product } from "@types"
 import { supabase } from "@lib/supabase"
 
+export async function getAllProducts() {
+  const { data, error } = await supabase.from("products").select()
+  return { products: data as Product[] | null, error }
+}
+
 export async function getProductsByCategory(category: string) {
   const { data, error } = await supabase
     .from("products")
