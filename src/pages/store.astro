@@ -1,0 +1,97 @@
+---
+import { getAllProducts } from "@db/products"
+import { formatPrice } from "@lib/format"
+import Layout from "@layouts/Layout.astro"
+import Filters from "@components/Filters.astro"
+import CldImage from "@components/ui/CldImage.astro"
+
+const { products, error } = await getAllProducts()
+---
+
+<Layout title="Nuestros Productos" normalHeader>
+  <main class="grow flex flex-col gap-14 pb-32">
+    <header class="flex flex-col gap-2">
+      <CldImage
+        width={2400}
+        height={300}
+        quality="100"
+        alt="Several Models"
+        src="dunor/models_services"
+        class="w-full aspect-[5/1] sm:aspect-[8/1] md:aspect-[10/1] max-h-[170px] object-cover object-center sm:object-left-bottom"
+      />
+      <div class="flex flex-col py-4 gap-2">
+        <h1 id="page-title" class="px-6 sm:px-8 w-full bg-white text-4xl">
+          Colección Completa
+        </h1>
+      </div>
+      <div class="flex items-center justify-end gap-2 pr-8 text-neutral-500">
+        <button type="button" title="List View">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8">
+            <use xlink:href="/icons/filters.svg#list"></use>
+          </svg>
+        </button>
+        <button type="button" title="Grid View">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8">
+            <use xlink:href="/icons/filters.svg#grid"></use>
+          </svg>
+        </button>
+      </div>
+    </header>
+    <div class="flex flex-col md:flex-row gap-12 px-6 sm:px-8 w-full">
+      <Filters />
+      <section class="grow products-grid text-justify">
+        {
+          products?.map(({ id, name, price, image_url }) => {
+            const normalizedName = name.toLowerCase().replace(/\s/g, "_")
+            return (
+              <a href={`/trajes/${id}-${normalizedName}`} class="w-full max-w-72">
+                <article class="w-full">
+                  <CldImage
+                    width={400}
+                    height={536}
+                    alt={name}
+                    src={image_url}
+                    class="w-full h-96 object-cover"
+                  />
+                  <header class="pt-2.5 px-2">
+                    <h2 class="text-lg">{name}</h2>
+                    <p class="text-neutral-500">{formatPrice(price)} COP</p>
+                  </header>
+                </article>
+              </a>
+            )
+          })
+        }
+        {
+          error && (
+            <div class="flex items-center justify-center w-full h-96">
+              <h1 class="text-2xl text-red-700">Hubo un error al cargar los productos</h1>
+              <p class="text-lg text-neutral-600">{error.message}</p>
+            </div>
+          )
+        }
+      </section>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 2.5rem 1.5rem;
+  }
+</style>
+
+<script>
+  const title = document.getElementById("page-title")!
+  const sticky = title.offsetTop
+
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > sticky) {
+      title.classList.add("fixed", "top-0", "z-20", "py-3", "border-b")
+    } else {
+      title.classList.remove("fixed", "top-0", "z-20", "py-3", "border-b")
+    }
+  })
+</script>
