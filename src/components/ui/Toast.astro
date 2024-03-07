@@ -1,0 +1,72 @@
+---
+---
+
+<!-- Toast component in vanilla JS -->
+<div class="toast">
+  <div class="toast__content">
+    <p class="toast__text"></p>
+  </div>
+</div>
+
+<style>
+  .toast {
+    opacity: 0;
+    position: fixed;
+    bottom: 2.5rem;
+    right: 1rem;
+    z-index: 100;
+    background-color: white;
+    padding: 1rem 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .toast--show {
+    opacity: 1;
+    animation:
+      slideIn 0.25s ease-in,
+      slideOut 0.25s 5s ease-out;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideOut {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+  }
+</style>
+
+<script>
+  const toast = document.querySelector(".toast")!
+  const toastText = document.querySelector(".toast__text")!
+
+  document.addEventListener("show-toast", ev => {
+    const { detail } = ev as CustomEvent
+    toastText.textContent = detail
+
+    toast.classList.add("toast--show")
+    setTimeout(() => {
+      toast.classList.remove("toast--show")
+    }, 5200)
+  })
+
+  // Remove the toast from the DOM when clicked
+  toast.addEventListener("click", () => {
+    toast.classList.remove("toast--show")
+  })
+</script>
