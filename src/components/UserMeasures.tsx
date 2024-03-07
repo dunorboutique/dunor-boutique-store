@@ -13,10 +13,16 @@ export function UserMeasures({ measurement }: { measurement: BodygramResponse })
   const userData = data.input.photoScan
   const measurements = filterByMeasureName(data.measurements)
 
+  function onEditMeasures() {}
+
+  function onConfirmedMeasures() {
+    return location.href = "/checkout/payment"
+  }
+
   return (
     <article className="flex flex-col gap-6 mt-10">
       <h2 className="text-2xl font-semibold">Tus Medidas</h2>
-      <header className="flex items-center gap-4">
+      <header className="flex flex-wrap items-center gap-4">
         <p>
           {userData.height / 10} <span className="text-sm opacity-70">cm</span>
         </p>
@@ -35,7 +41,7 @@ export function UserMeasures({ measurement }: { measurement: BodygramResponse })
           {formatTime(data.createdAt)}
         </p>
       </header>
-      <div className="grid sm:grid-cols-3 gap-4">
+      <div className="grid justify-center xs:grid-cols-2 md:grid-cols-3 gap-4">
         {measurements.map((measurement, index) => {
           return (
             <div
@@ -56,6 +62,10 @@ export function UserMeasures({ measurement }: { measurement: BodygramResponse })
             </div>
           )
         })}
+      </div>
+      <div class="flex flex-wrap items-center gap-5 mx-auto">
+        <button class="shrink-0 py-3 px-6 w-fit border-2 border-dunor-black rounded-md text-dunor-black hover:scale-105 transition-transform">Editar medidas</button>
+        <button onClick={onConfirmedMeasures} class="shrink-0 py-3 px-6 w-fit bg-dunor-black border-2 border-dunor-black rounded-md text-white hover:scale-105 transition-transform">Confirmar medidas</button>
       </div>
     </article>
   )

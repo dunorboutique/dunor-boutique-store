@@ -84,7 +84,7 @@ export default function CalculateMeasures() {
         <button
           type="submit"
           disabled={isLoading}
-          className="shrink-0 self-center flex items-center gap-2 mt-5 px-10 py-2.5 bg-dunor-black rounded text-white text-lg font-medium disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-dunor-gold focus-visible:ring-4 transition"
+          className="shrink-0 self-center flex items-center gap-2 mt-5 px-10 py-2.5 bg-dunor-black rounded text-white text-lg font-medium hover:scale-105 disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-dunor-gold focus-visible:ring-4 transition"
         >
           {isLoading && <LoadingIcon />}
           {isLoading ? "Cargando Medidas..." : "Calcular"}
