@@ -1,0 +1,189 @@
+---
+import Layout from "@layouts/Layout.astro"
+import Button from "@ui/Button.astro"
+import InputField from "@ui/InputField.astro"
+import Toast from "@ui/Toast.astro"
+
+const paymentAvailable = false
+---
+
+<Layout title="Información de Pago" normalHeader>
+  <main
+    class="grow flex flex-col gap-10 md:gap-20 lg:gap-12 pt-8 pb-32 px-6 xs:px-10 mx-auto w-full max-w-6xl"
+  >
+    <header class="text-balance">
+      <h1 class="text-3xl font-semibold text-dunor-black">Confirmación de Pedido</h1>
+      <p class="text-neutral-600">A continuación, ingresa tus datos para completar la compra.</p>
+    </header>
+    <section class="flex flex-wrap-reverse md:flex-nowrap gap-16 lg:gap-32 w-full">
+      <div class="flex flex-col gap-8 md:w-1/2">
+        <article class="relative flex flex-col gap-3 mt-2 lg:mt-0 lg:pl-16">
+          <span
+            class="absolute -top-10 lg:top-1 left-0 flex items-center justify-center size-7 border-2 border-dunor-black rounded-full font-semibold"
+            >1</span
+          >
+          <h2 class="text-2xl font-medium text-dunor-black">
+            Información del cliente
+            <span class="block text-base font-normal">Dirección entrega</span>
+          </h2>
+          <form class="flex flex-col gap-4 max-w-md">
+            <InputField
+              label="Nombre y Apellidos"
+              type="text"
+              id="fullName"
+              name="fullName"
+              title="Debe contener solo letras y tener entre 6 y 50 caracteres."
+              pattern="[a-zA-ZáéíóúÁÉÍÓÚÜ ']{6,50}"
+              placeholder="e.j. José Pérez"
+            />
+            <InputField
+              label="Correo Eletrónico"
+              type="email"
+              id="email"
+              name="email"
+              title="Debe ser un correo electrónico válido."
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}"
+              placeholder="joseperez@gmail.com"
+            />
+            <div class="flex gap-3">
+              <InputField
+                label="Dirección"
+                type="text"
+                id="address"
+                name="address"
+                placeholder="Cl. 100 #70 - 140"
+              />
+              <InputField
+                label="Teléfono"
+                type="tel"
+                id="phone"
+                name="phone"
+                title="Debe ser un número de teléfono válido."
+                pattern="[0-9]{10}"
+                placeholder="3001234567"
+              />
+            </div>
+            <Button id="next-step" data-step="payment" type="button">Siguiente</Button>
+          </form>
+        </article>
+        <hr />
+        <article class="relative flex flex-col gap-3 mt-10 lg:mt-0 lg:pl-16">
+          <span
+            class="absolute -top-10 lg:top-1 left-0 flex items-center justify-center size-7 border-2 border-dunor-black rounded-full font-semibold"
+            >2</span
+          >
+          <h2 class="text-2xl font-medium text-dunor-black">
+            Formas de Pago
+            <span class="block text-base font-normal">Métodos de pago seguros</span>
+          </h2>
+          {
+            paymentAvailable && (
+              <form data-step="payment" class="flex flex-col gap-4 max-w-md hidden">
+                <InputField
+                  label="Nombre del titular"
+                  type="text"
+                  id="cardName"
+                  name="cardName"
+                  placeholder="José Pérez"
+                  title="Debe contener solo letras y tener entre 6 y 50 caracteres."
+                  pattern="[a-zA-ZáéíóúÁÉÍÓÚÜ ']{6,50}"
+                />
+                <InputField
+                  label="Número de tarjeta"
+                  type="text"
+                  id="cardNumber"
+                  name="cardNumber"
+                  placeholder="1234 5678 9012 3456"
+                  title="Debe ser un número de tarjeta válido."
+                  pattern="[0-9]{16}"
+                />
+                <div class="flex gap-3">
+                  <InputField
+                    label="Fecha de expiración"
+                    type="text"
+                    id="cardExpiration"
+                    name="cardExpiration"
+                    placeholder="MM/AA"
+                    title="Debe ser una fecha válida."
+                    pattern="[0-9]{4}"
+                  />
+                  <InputField
+                    label="CVC / CVV"
+                    type="number"
+                    id="cardCvv"
+                    name="cardCvv"
+                    placeholder="123"
+                    title="Debe ser un número entre 3 y 4 dígitos."
+                    pattern="[0-9]{3,4}"
+                  />
+                </div>
+                <Button type="submit">Pagar</Button>
+              </form>
+            )
+          }
+          <form data-step="payment" class="flex flex-col gap-4 max-w-md hidden">
+            <div class="text-neutral-600 text-pretty">
+              <p>Actualmente aceptamos pagos en persona en nuestra tienda.</p>
+              <p>Acércate a nuestra tienda para realizar tu pago.</p>
+            </div>
+            <Button type="button">Reservar</Button>
+          </form>
+        </article>
+      </div>
+      <aside class="md:grow relative md:sticky md:top-10 h-fit">
+        <article class="flex flex-col gap-3">
+          <h2 class="flex items-center gap-2 text-xl font-semibold text-dunor-black">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="w-7 h-7">
+              <use xlink:href="/icons/header.svg#cart"></use>
+            </svg>
+            <span>Tu Pedido</span>
+          </h2>
+          <div class="flex flex-col gap-4">
+            <div class="flex flex-wrap items-center justify-between py-5">
+              <span class="text-sm font-light"> Artículo/s en tu carrito por valor de</span>
+              <span class="text-sm text-dunor-black font-medium">$ 100.000COP</span>
+            </div>
+            <div class="flex items-center justify-between py-5 border-y-2 border-dunor-black">
+              <span class="text-lg text-dunor-black font-medium">Subtotal</span>
+              <span class="text-xl text-dunor-black font-medium">$ 100.000COP</span>
+            </div>
+            <div class="flex flex-col gap-1">
+              <span class="text-lg text-dunor-black font-medium">Tu perfil corporal</span>
+              <span class="text-sm font-light">Juanita 170cm 58kg 23 años</span>
+            </div>
+          </div>
+        </article>
+      </aside>
+      <Toast />
+    </section>
+  </main>
+</Layout>
+
+<script>
+  const nextStepButton = document.getElementById("next-step")!
+  nextStepButton.addEventListener("click", () => {
+    const step = nextStepButton.getAttribute("data-step")
+    const form = document.querySelector(`form[data-step="${step}"]`) as HTMLFormElement
+    if (form) {
+      form.classList.remove("hidden")
+      form.scrollIntoView({ behavior: "smooth" })
+      nextStepButton.classList.add("hidden")
+    }
+  })
+
+  const paymentButton = document.querySelector("form[data-step='payment'] button")!
+  paymentButton.addEventListener("click", () => {
+    document.dispatchEvent(
+      new CustomEvent("show-toast", {
+        detail: "Tu pedido ha sido reservado. Acércate a nuestra tienda para realizar tu pago."
+      })
+    )
+  })
+
+  // redirect to home after show-toast event ends
+  document.addEventListener("show-toast", ev => {
+    setTimeout(() => {
+      location.href = "/account"
+    }, 5300)
+  })
+</script>
