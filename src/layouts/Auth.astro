@@ -2,19 +2,13 @@
 import BaseAuth from "./BaseAuth.astro"
 import ErrorMessage from "@components/ui/ErrorMessage.astro"
 
-const { cookies, redirect, url } = Astro
-const accessToken = cookies.get("sb_access_token")
-const refreshToken = cookies.get("sb_refresh_token")
-if (accessToken && refreshToken) redirect("/account")
-
-const errorMessage = url.searchParams.get("error")
-
 interface Props {
   siteTitle: string
   title: string
   bgImage: string
 }
 const { siteTitle, title, bgImage } = Astro.props as Props
+const errorMessage = Astro.url.searchParams.get("error")
 ---
 
 <BaseAuth title={siteTitle}>
