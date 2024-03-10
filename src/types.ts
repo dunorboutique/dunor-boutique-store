@@ -1,3 +1,10 @@
+export type User = {
+  id: string
+  email: string
+  fullName: string
+  avatarUrl: string
+}
+
 export type Product = {
   id: string
   name: string
@@ -8,11 +15,22 @@ export type Product = {
   }
 }
 
+export type OrderStatus = "pending" | "processing" | "shipped" | "delivered" | "canceled"
+export type OrderWithProducts = Order & { products: CartItem[] }
+export type Order = {
+  id: string
+  user: User
+  products_id: string[]
+  status: string
+  total: number
+  created_at: string
+}
+
 export type CartItem = Product & {
   quantity: number
 }
 
-export type PartialCartItem = Pick<Product, 'id' | 'price'> & {
+export type PartialCartItem = Pick<Product, "id" | "price"> & {
   quantity: number
 }
 
@@ -22,7 +40,7 @@ export type BodygramResponse = {
       data: string
       format: "obj"
       type: "highResolution"
-    },
+    }
     createdAt: number
     customScanId: string
     error: {
