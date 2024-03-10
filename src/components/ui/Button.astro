@@ -3,15 +3,22 @@ interface Props {
   type?: "button" | "submit" | "reset"
   id?: string
   class?: string
+  variant?: "primary" | "outline"
+  [key: string]: unknown
 }
-const { type, id, class: className, ...rest } = Astro.props as Props
+const { type, id, class: className, variant = "primary", ...rest } = Astro.props as Props
+
+const variantClasses = {
+  primary: "bg-dunor-black text-white",
+  outline: "border-2 border-dunor-black text-dunor-black"
+}
 ---
 
 <button
   type={type}
   id={id}
   {...rest}
-  class={`shrink-0 flex items-center gap-2 px-10 py-2.5 w-fit bg-dunor-black rounded text-white text-lg font-medium hover:scale-105 disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-dunor-black/90 focus-visible:ring-4 focus-visible:ring-offset-2 transition ${className}`}
+  class={`shrink-0 flex items-center justify-center gap-2 px-10 py-2.5 w-fit ${variantClasses[variant]} rounded text-lg font-medium hover:scale-105 disabled:opacity-50 disabled:pointer-events-none disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-dunor-black/90 focus-visible:ring-4 focus-visible:ring-offset-2 transition ${className}`}
 >
   <slot />
 </button>
