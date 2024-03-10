@@ -1,13 +1,13 @@
 ---
 interface Props {
-  type: "text" | "number" | "password" | "email" | "tel"
+  type: "text" | "number" | "password" | "email" | "checkbox"
   variant?: "primary" | "secondary"
   label: string
   id: string
   name: string
   title?: string
   pattern?: string
-  placeholder: string
+  placeholder?: string
   required?: boolean
 }
 const {
@@ -22,27 +22,46 @@ const {
   required = true
 } = Astro.props as Props
 
-let styles = ""
-if (variant === "primary") {
-  styles = "focus-visible:border-dunor-black focus-visible:ring-dunor-black/40"
-} else if (variant === "secondary") {
-  styles = "focus-visible:ring-dunor-black/70 focus-visible:ring-offset-2"
+const variantStyles = {
+  primary: "focus-visible:border-dunor-black focus-visible:ring-dunor-black/40",
+  secondary: "focus-visible:ring-dunor-black/70 focus-visible:ring-offset-2"
 }
 ---
 
-<div class="flex flex-col gap-1">
-  <label for="phone" class="text-neutral-700">
-    {label}
-    {required && <span class="text-red-500">*</span>}
-  </label>
-  <input
-    id={id}
-    type={type}
-    name={name}
-    title={title}
-    pattern={pattern}
-    placeholder={placeholder}
-    class={`block px-3.5 py-2.5 w-full bg-white border rounded-md border-neutral-300 placeholder-neutral-400 placeholder:font-[sans-serif] focus-visible:outline-none focus-visible:ring-[3px] ${styles} transition-shadow`}
-    required
-  />
-</div>
+{
+  type === "checkbox" ? (
+    <div class="flex items-center gap-2">
+      <input
+        id={id}
+        type={type}
+        name={name}
+        title={title}
+        pattern={pattern}
+        placeholder={placeholder}
+        class={`accent-dunor-black w-4 h-4 focus-visible:outline-none focus-visible:ring-[3px] ${variantStyles[variant]} transition-shadow`}
+        required={required}
+      />
+      <label for={id} class="text-neutral-700">
+        {label}
+        {required && <span class="text-red-500">*</span>}
+      </label>
+    </div>
+  ) : (
+    <div class="flex flex-col gap-1">
+      <label for={id} class="text-neutral-700">
+        {label}
+        {required && <span class="text-red-500">*</span>}
+      </label>
+      <input
+        id={id}
+        type={type}
+        name={name}
+        title={title}
+        pattern={pattern}
+        placeholder={placeholder}
+        class={`block px-3.5 py-2.5 w-full bg-white border rounded-md border-neutral-300 placeholder-neutral-400 placeholder:font-[sans-serif] focus-visible:outline-none focus-visible:ring-[3px] ${variantStyles[variant]} transition-shadow`}
+        required={required}
+      />
+    </div>
+  )
+}
