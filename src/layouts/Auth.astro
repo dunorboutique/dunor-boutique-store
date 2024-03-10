@@ -1,82 +1,39 @@
 ---
-import { SITE_TITLE, SITE_DESCRIPTION } from "@consts"
+import BaseAuth from "./BaseAuth.astro"
+import ErrorMessage from "@components/ui/ErrorMessage.astro"
+
+const { cookies, redirect, url } = Astro
+const accessToken = cookies.get("sb_access_token")
+const refreshToken = cookies.get("sb_refresh_token")
+if (accessToken && refreshToken) redirect("/account")
+
+const errorMessage = url.searchParams.get("error")
 
 interface Props {
-  title?: string
-  description?: string
-  image?: string
+  siteTitle: string
+  title: string
+  bgImage: string
 }
-
-const canonicalURL = new URL(Astro.url.pathname, Astro.site)
-const {
-  title,
-  description = SITE_DESCRIPTION,
-  image = "/og-image.jpg",
-} = Astro.props as Props
-const currentTitle = title ? `${title} | ${SITE_TITLE}` : SITE_TITLE
+const { siteTitle, title, bgImage } = Astro.props as Props
 ---
 
-<!doctype html>
-<html lang="es">
-  <head>
-    <!-- Global Metadata -->
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
-    <link rel="sitemap" href="/sitemap-index.xml" />
-
-    <!-- Font preloads -->
-    <style is:global>
-      @font-face {
-        font-family: "Fira Sans";
-        src: url("/fonts/FiraSans-Regular.ttf") format("truetype");
-        font-optical-sizing: auto;
-        font-weight: 400;
-        font-style: normal;
-        font-display: swap;
-      }
-
-      @font-face {
-        font-family: "Fira Sans";
-        src: url("/fonts/FiraSans-Medium.ttf") format("truetype");
-        font-weight: 500;
-        font-style: normal;
-        font-display: swap;
-      }
-
-      @font-face {
-        font-family: "Fira Sans";
-        src: url("/fonts/FiraSans-SemiBold.ttf") format("truetype");
-        font-weight: 600;
-        font-style: normal;
-        font-display: swap;
-      }
-    </style>
-
-    <!-- Canonical URL -->
-    <link rel="canonical" href={canonicalURL} />
-
-    <!-- Primary Meta Tags -->
-    <title>{currentTitle}</title>
-    <meta name="title" content={currentTitle} />
-    <meta name="description" content={description} />
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content={Astro.url} />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL(image, Astro.url)} />
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={Astro.url} />
-    <meta property="twitter:title" content={title} />
-    <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={new URL(image, Astro.url)} />
-  </head>
-  <body class="flex flex-col min-h-screen font-sans">
-    <slot />
-  </body>
-</html>
+<BaseAuth title={siteTitle}>
+  <main class="flex w-full h-screen">
+    <img
+      src={bgImage}
+      alt="Modelo en traje de gala blanco"
+      class="hidden md:block md:w-[45%] lg:w-1/2 xl:w-3/4 2xl:w-4/5 h-full object-cover"
+      loading="lazy"
+    />
+    <section class="flex flex-col items-center gap-20 py-10 w-full">
+      <a href="/" class="shrink-0 px-4">
+        <img src="/icons/dunor.svg" alt="DUNOR logo" class="w-52" />
+      </a>
+      <div class="flex flex-col gap-4">
+        <h1 class="text-4xl font-medium">{title}</h1>
+        {errorMessage && <ErrorMessage error={errorMessage} />}
+        <slot />
+      </div>
+    </section>
+  </main>
+</BaseAuth>
