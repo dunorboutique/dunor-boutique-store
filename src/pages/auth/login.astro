@@ -2,6 +2,11 @@
 import Auth from "@layouts/Auth.astro"
 import Button from "@components/ui/Button.astro"
 import InputField from "@components/ui/InputField.astro"
+
+const { cookies, redirect } = Astro
+const accessToken = cookies.get("sb_access_token")
+const refreshToken = cookies.get("sb_refresh_token")
+if (accessToken && refreshToken) return redirect("/account")
 ---
 
 <Auth siteTitle="Iniciar sesión" title="Ingresa a tu cuenta" bgImage="/images/modelo-login.jpg">
