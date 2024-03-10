@@ -1,0 +1,45 @@
+---
+import Auth from "@layouts/Auth.astro"
+import Button from "@components/ui/Button.astro"
+import InputField from "@components/ui/InputField.astro"
+---
+
+<Auth siteTitle="Iniciar sesión" title="Ingresa a tu cuenta" bgImage="/images/modelo-login.jpg">
+  <form method="post" action="/api/auth/login" class="flex flex-col gap-4 max-w-md">
+    <InputField
+      label="Correo Electrónico"
+      type="email"
+      id="email"
+      name="email"
+      title="Debe ser un correo electrónico válido."
+      pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}"
+      placeholder="joseperez@gmail.com"
+      required={false}
+    />
+    <InputField
+      label="Contraseña"
+      type="password"
+      id="password"
+      name="password"
+      title="Debe ser una contraseña válida."
+      pattern=".{10,}"
+      placeholder="**********"
+      required={false}
+    />
+    <Button type="submit" class="w-full">Iniciar sesión</Button>
+    <span class="flex gap-4 items-center">
+      <hr class="w-full" />
+      <span class="text-neutral-600">ó</span>
+      <hr class="w-full" />
+    </span>
+    <a href="/auth/register" class="text-lg text-center hover:underline">
+      ¿Sin cuenta? Regístrate aquí
+    </a>
+    <Button type="submit" value="google" name="provider" variant="outline" class="self-center">
+      Ingresar con Google
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6">
+        <use xlink:href="/icons/features.svg#google"></use>
+      </svg>
+    </Button>
+  </form>
+</Auth>
