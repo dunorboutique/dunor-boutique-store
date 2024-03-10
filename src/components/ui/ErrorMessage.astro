@@ -1,0 +1,20 @@
+---
+type Props = {
+  error: string
+}
+const { error } = Astro.props
+---
+
+<div
+  class="relative flex items-center gap-2 p-2 bg-red-200 border-2 border-red-700 rounded-md text-red-800"
+>
+  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
+    <use xlink:href="/icons/features.svg#error"></use>
+  </svg>
+  <p class="text-sm">{error}</p>
+  <button class="absolute right-2" onclick="this.parentElement.remove()">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5">
+      <use xlink:href="/icons/features.svg#close"></use>
+    </svg>
+  </button>
+</div>
