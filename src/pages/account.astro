@@ -1,12 +1,70 @@
 ---
 import Layout from "@layouts/Layout.astro"
+import { getUserInfo, isUserSigned, cleanSession } from "@lib/auth"
+import { getOrdersByUserId } from "@db/orders"
+import { formatDateTime, formatPrice } from "@lib/format"
+import Button from "@ui/Button.astro"
+
+const { cookies, redirect } = Astro
+if (!isUserSigned(cookies)) redirect("/auth/login")
+
+const user = await getUserInfo(cookies)
+if (!user) {
+  cleanSession(cookies)
+  return redirect("/auth/login")
+}
+const { id, avatarUrl, fullName, email } = user
+const [firstName] = fullName.split(" ")
+
+const { orders, error } = await getOrdersByUserId(id)
+const shortenId = (orderId: string) => orderId.split("-")[0]
 ---
 
 <Layout title="Tu cuenta">
-  <main class="grow flex flex-col gap-14 pt-10 pb-32">
-    <div class="mx-auto max-w-96 text-center">
-      <h1 class="text-4xl font-medium">Tu Cuenta</h1>
-      <p>En esta sección podrás ver tus compras, tus datos y tus direcciones de envío.</p>
-    </div>
+  <main class="grow flex flex-col gap-10 pt-6 pb-28 px-6 sm:px-10">
+    <header class="flex items-center gap-4">
+      <img class="size-20 rounded-full" src={avatarUrl} alt={fullName} />
+      <div class="text-left">
+        <h1 class="text-3xl font-medium">Bienvenido, {firstName}!</h1>
+        <p class="text-lg text-gray-500">{email}</p>
+      </div>
+    </header>
+    <section class="flex flex-col gap-6">
+      <h2 class="text-2xl font-medium">Tus compras</h2>
+      {
+        error && (
+          <>
+            <div>
+              <p class="mb-2 -mt-2 text-lg text-gray-500">Hubo un error al cargar tus compras.</p>
+              <Button onclick="location.reload()">Recargar</Button>
+            </div>
+          </>
+        )
+      }
+      {
+        orders && orders.length > 0 && (
+          <ul class="flex flex-col gap-6">
+            {orders.map(order => (
+              <li class="flex flex-col gap-2 p-4 w-fit bg-white border-2 border-dunor-black/30 rounded-md">
+                <a href={`/orders/${order.id}`} class="hover:underline">
+                  <h3 class="text-xl font-medium text-neutral-700">
+                    Orden N° {shortenId(order.id)}
+                  </h3>
+                </a>
+                <p class="flex flex-col text-neutral-600">
+                  <span>Fecha: {formatDateTime(order.created_at)}</span>
+                  <span>Total: {formatPrice(order.total)}COP</span>
+                </p>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+      {
+        !error && orders && orders.length === 0 && (
+          <p class="text-lg text-gray-500">Aún no has realizado ninguna compra.</p>
+        )
+      }
+    </section>
   </main>
 </Layout>
