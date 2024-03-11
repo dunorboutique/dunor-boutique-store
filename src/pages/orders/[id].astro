@@ -1,0 +1,61 @@
+---
+import { isUserSigned } from "@lib/auth"
+import { formatPrice, formatDateTime } from "@lib/format"
+import { getOrderById } from "@db/orders"
+import Layout from "@layouts/Layout.astro"
+import CldImage from "@components/ui/CldImage.astro"
+
+const { cookies, redirect } = Astro
+if (!isUserSigned(cookies)) redirect("/auth/login")
+
+const { id } = Astro.params as { id: string }
+const { order, error } = await getOrderById(id)
+if (order == null || error) return Astro.redirect("/account")
+
+const shortenId = (orderId: string) => orderId.split("-")[0]
+---
+
+<Layout title={`Orden N° ${shortenId(id)}`}>
+  <main class="grow flex flex-col gap-16 pt-8 pb-32 px-6 xs:px-10">
+    <h1 class="text-3xl text-center font-semibold">Orden N° {shortenId(id)}</h1>
+    <section class="flex flex-col gap-6 mx-auto w-full max-w-2xl">
+      <header class="flex flex-col gap-1.5">
+        <h2 class="text-xl font-medium">Detalles de la orden</h2>
+        <div class="flex items-center justify-between">
+          <p class="text-neutral-600">Fecha: {formatDateTime(order.created_at)}</p>
+          <p class="text-neutral-600">Estado: {order.status}</p>
+        </div>
+      </header>
+      <div class="flex flex-col gap-3">
+        <h2 class="text-xl font-medium">Productos</h2>
+        <ul class="space-y-4">
+          {
+            order?.products.map(({ name, price, image_url, quantity }) => {
+              return (
+                <li class="flex space-x-4">
+                  <CldImage
+                    src={image_url}
+                    alt={name}
+                    width={100}
+                    height={100}
+                    class="rounded-md"
+                  />
+                  <div>
+                    <h3 class="text-lg">{name}</h3>
+                    <p class="text-sm text-gray-600">
+                      Cantidad: {quantity} x {formatPrice(price)}
+                    </p>
+                  </div>
+                </li>
+              )
+            })
+          }
+        </ul>
+      </div>
+      <footer class="flex xs:flex-col items-center xs:items-end gap-2">
+        <h2 class="text-xl">Total</h2>
+        <p class="text-2xl">{formatPrice(order.total)}</p>
+      </footer>
+    </section>
+  </main>
+</Layout>
