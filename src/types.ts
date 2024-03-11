@@ -16,11 +16,11 @@ export type Product = {
 }
 
 export type OrderStatus = "pending" | "processing" | "shipped" | "delivered" | "canceled"
-export type OrderWithProducts = Omit<Order, "products_id"> & { products: CartItem[] }
+export type OrderWithProducts = Order & { products: CartItem[] }
 export type Order = {
   id: string
   user: User
-  products_id: string[]
+  products_id_quantity: Array<{ id: string; quantity: number }>
   status: string
   total: number
   created_at: string
