@@ -16,7 +16,7 @@ export type Product = {
 }
 
 export type OrderStatus = "pending" | "processing" | "shipped" | "delivered" | "canceled"
-export type OrderWithProducts = Order & { products: CartItem[] }
+export type OrderWithProducts = Omit<Order, "products_id"> & { products: CartItem[] }
 export type Order = {
   id: string
   user: User
