@@ -16,6 +16,10 @@ if (!user) {
 const { id, avatarUrl, fullName, email } = user
 const [firstName] = fullName.split(" ")
 
+if (!cookies.has("user-id")) {
+  cookies.set("user-id", id, { secure: true, path: "/" })
+}
+
 const { orders, error } = await getOrdersByUserId(id)
 const shortenId = (orderId: string) => orderId.split("-")[0]
 ---
