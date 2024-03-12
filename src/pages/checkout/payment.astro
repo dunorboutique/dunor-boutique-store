@@ -3,7 +3,17 @@ import Layout from "@layouts/Layout.astro"
 import Button from "@ui/Button.astro"
 import InputField from "@ui/InputField.astro"
 import Toast from "@ui/Toast.astro"
+import { getUserInfo, isUserSigned, cleanSession } from "@lib/auth"
 
+const { cookies, redirect } = Astro
+if (!isUserSigned(cookies)) redirect("/auth/login")
+
+const user = await getUserInfo(cookies)
+if (!user) {
+  cleanSession(cookies)
+  return redirect("/auth/login")
+}
+const { fullName, email } = user
 const paymentAvailable = false
 ---
 
@@ -32,6 +42,7 @@ const paymentAvailable = false
               type="text"
               id="fullName"
               name="fullName"
+              value={fullName}
               title="Debe contener solo letras y tener entre 6 y 50 caracteres."
               pattern="[a-zA-ZáéíóúÁÉÍÓÚÜ ']{6,50}"
               placeholder="e.j. José Pérez"
@@ -41,8 +52,9 @@ const paymentAvailable = false
               type="email"
               id="email"
               name="email"
+              value={email}
               title="Debe ser un correo electrónico válido."
-              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}"
+              pattern="[a-z0-9._]+@[a-z0-9.]+\.[a-z]{2,4}"
               placeholder="joseperez@gmail.com"
             />
             <div class="flex gap-3">
@@ -63,7 +75,7 @@ const paymentAvailable = false
                 placeholder="3001234567"
               />
             </div>
-            <Button id="next-step" data-step="payment" type="button">Siguiente</Button>
+            <Button id="next-step" data-step="payment" type="submit">Siguiente</Button>
           </form>
         </article>
         <hr />
@@ -141,15 +153,11 @@ const paymentAvailable = false
           <div class="flex flex-col gap-4">
             <div class="flex flex-wrap items-center justify-between py-5">
               <span class="text-sm font-light"> Artículo/s en tu carrito por valor de</span>
-              <span class="text-sm text-dunor-black font-medium">$ 100.000COP</span>
+              <span data-price class="text-sm text-dunor-black font-medium">$ 100.000COP</span>
             </div>
             <div class="flex items-center justify-between py-5 border-y-2 border-dunor-black">
               <span class="text-lg text-dunor-black font-medium">Subtotal</span>
-              <span class="text-xl text-dunor-black font-medium">$ 100.000COP</span>
-            </div>
-            <div class="flex flex-col gap-1">
-              <span class="text-lg text-dunor-black font-medium">Tu perfil corporal</span>
-              <span class="text-sm font-light">Juanita 170cm 58kg 23 años</span>
+              <span data-price class="text-xl text-dunor-black font-medium">$ 100.000COP</span>
             </div>
           </div>
         </article>
@@ -160,14 +168,20 @@ const paymentAvailable = false
 </Layout>
 
 <script>
+  import { getSubtotal } from "@lib/cart"
+
   const nextStepButton = document.getElementById("next-step")!
-  nextStepButton.addEventListener("click", () => {
-    const step = nextStepButton.getAttribute("data-step")
-    const form = document.querySelector(`form[data-step="${step}"]`) as HTMLFormElement
-    if (form) {
-      form.classList.remove("hidden")
-      form.scrollIntoView({ behavior: "smooth" })
-      nextStepButton.classList.add("hidden")
+  nextStepButton.addEventListener("click", ev => {
+    const parentForm = nextStepButton.closest("form") as HTMLFormElement
+    if (parentForm.checkValidity()) {
+      ev.preventDefault()
+      const step = nextStepButton.getAttribute("data-step")
+      const form = document.querySelector(`form[data-step="${step}"]`) as HTMLFormElement
+      if (form) {
+        form.classList.remove("hidden")
+        form.scrollIntoView({ behavior: "smooth" })
+        nextStepButton.classList.add("hidden")
+      }
     }
   })
 
@@ -184,6 +198,12 @@ const paymentAvailable = false
   document.addEventListener("show-toast", ev => {
     setTimeout(() => {
       location.href = "/account"
-    }, 5300)
+    }, 2500)
+  })
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const subtotal = getSubtotal()
+    const subtotalElements = document.querySelectorAll("span[data-price]")
+    subtotalElements.forEach(el => (el.textContent = `$ ${subtotal}COP`))
   })
 </script>
