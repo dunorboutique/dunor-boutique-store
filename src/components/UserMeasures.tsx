@@ -1,5 +1,10 @@
 import type { BodygramResponse } from "@types"
-import { type MeasurementName, measureNameToTitle, filterByMeasureName } from "@lib/measures"
+import {
+  type MeasurementName,
+  measureNameToTitle,
+  filterByMeasureName,
+  filterAndTranslateMeasure
+} from "@lib/measures"
 import { formatTime } from "@lib/format"
 
 export function UserMeasures({ measurement }: { measurement: BodygramResponse }) {
@@ -13,10 +18,40 @@ export function UserMeasures({ measurement }: { measurement: BodygramResponse })
   const userData = data.input.photoScan
   const measurements = filterByMeasureName(data.measurements)
 
+  function getUpdateUserData() {
+    const completeMeasures = filterAndTranslateMeasure(data.measurements)
+    const userId = document.cookie.includes("user-id")
+      ? document.cookie.split("user-id=")[1].split(";")[0]
+      : ""
+    const userInfo = {
+      age: userData.age,
+      height: userData.height / 10,
+      weight: userData.weight / 1000,
+      gender: userData.gender
+    }
+    return { userId, measures: completeMeasures, userInfo }
+  }
+
   function onEditMeasures() {}
 
-  function onConfirmedMeasures() {
-    return location.href = "/checkout/payment"
+  async function onConfirmedMeasures() {
+    const { userId, measures, userInfo } = getUpdateUserData()
+    const response = await fetch("/api/user", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        userId,
+        measures,
+        userInfo
+      })
+    })
+    if (response.ok) {
+      return (location.href = "/checkout/payment")
+    } else {
+      console.error("Error al enviar las medidas")
+    }
   }
 
   return (
@@ -37,8 +72,7 @@ export function UserMeasures({ measurement }: { measurement: BodygramResponse })
           {userData.gender == "male" ? "Masculino" : "Femenino"}
         </p>
         <p>
-          <span className="text-sm opacity-70">Fecha medida</span>{" "}
-          {formatTime(data.createdAt)}
+          <span className="text-sm opacity-70">Fecha medida</span> {formatTime(data.createdAt)}
         </p>
       </header>
       <div className="grid justify-center xs:grid-cols-2 md:grid-cols-3 gap-4">
@@ -49,7 +83,7 @@ export function UserMeasures({ measurement }: { measurement: BodygramResponse })
               className="flex items-center justify-between py-4 px-3 w-52 h-28 border border-neutral-400 rounded-lg"
             >
               <div className="flex flex-col justify-between">
-                <h2 className="font-medium capitalize">
+                <h2 className="font-medium capitalize text-balance">
                   {measureNameToTitle(measurement.name as MeasurementName)}
                 </h2>
                 <p className="text-2xl font-bold">{measurement.value} cm</p>
@@ -64,8 +98,18 @@ export function UserMeasures({ measurement }: { measurement: BodygramResponse })
         })}
       </div>
       <div class="flex flex-wrap items-center gap-5 mx-auto">
-        <button class="shrink-0 py-3 px-6 w-fit border-2 border-dunor-black rounded-md text-dunor-black hover:scale-105 transition-transform">Editar medidas</button>
-        <button onClick={onConfirmedMeasures} class="shrink-0 py-3 px-6 w-fit bg-dunor-black border-2 border-dunor-black rounded-md text-white hover:scale-105 transition-transform">Confirmar medidas</button>
+        {/* <button
+          onClick={onEditMeasures}
+          class="shrink-0 py-3 px-6 w-fit border-2 border-dunor-black rounded-md text-dunor-black hover:scale-105 transition-transform"
+        >
+          Editar medidas
+        </button> */}
+        <button
+          onClick={onConfirmedMeasures}
+          class="shrink-0 py-3 px-6 w-fit bg-dunor-black border-2 border-dunor-black rounded-md text-white hover:scale-105 transition-transform"
+        >
+          Confirmar medidas
+        </button>
       </div>
     </article>
   )
@@ -104,5 +148,5 @@ function MeasurementErrors({ error }: MeasurementErrorsProps) {
     )
   }
 
-  return (<></>)
+  return <></>
 }

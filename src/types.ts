@@ -72,3 +72,14 @@ export type BodygramRequestData = {
   frontPhoto: string
   rightPhoto: string
 }
+
+export type UserMeasure = {
+  user_id: string
+  measures: Array<{ name: string; value: string }>
+  user_info: {
+    age: number
+    height: number
+    weight: number
+    gender: string
+  }
+}
