@@ -1,6 +1,10 @@
 ---
 import Layout from "@layouts/Layout.astro"
 import CalculateMeasures from "@components/Measures"
+import { isUserSigned } from "@lib/auth"
+
+const { cookies, redirect } = Astro
+if (!isUserSigned(cookies)) redirect("/auth/login")
 ---
 
 <Layout title="Tus Medidas">
