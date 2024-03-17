@@ -25,6 +25,7 @@ export type Order = {
   total: number
   created_at: string
 }
+export type OrderCreate = Omit<Order, "id" | "user" | "created_at"> & { user_id: string }
 
 export type CartItem = Product & {
   quantity: number

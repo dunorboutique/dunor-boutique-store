@@ -1,4 +1,4 @@
-import type { Order, OrderWithProducts } from "@types"
+import type { Order, OrderCreate, OrderWithProducts } from "@types"
 import { supabase } from "@lib/supabase"
 import { getProductsByIds } from "@db/products"
 
@@ -25,7 +25,7 @@ export async function getOrderById(id: string) {
   return { order: null, error }
 }
 
-export async function createOrder(order: Order) {
+export async function createOrder(order: OrderCreate) {
   const { data, error } = await supabase.from("orders").insert([order])
   return { order: data as Order | null, error }
 }
