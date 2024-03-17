@@ -45,3 +45,8 @@ export function removeItemCart(productId: string) {
   setCart(newCart)
   window.dispatchEvent(new CustomEvent("cart:removed"))
 }
+
+export function clearCart() {
+  setCart([])
+  window.dispatchEvent(new CustomEvent("cart:cleared"))
+}
