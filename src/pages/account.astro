@@ -47,7 +47,7 @@ const shortenId = (orderId: string) => orderId.split("-")[0]
       }
       {
         orders && orders.length > 0 && (
-          <ul class="flex flex-col gap-6">
+          <ul class="flex gap-6">
             {orders.map(order => (
               <li class="flex flex-col gap-2 p-4 w-fit bg-white border-2 border-dunor-black/30 rounded-md">
                 <a href={`/orders/${order.id}`} class="hover:underline">
