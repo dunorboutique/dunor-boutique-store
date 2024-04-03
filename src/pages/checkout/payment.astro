@@ -13,7 +13,7 @@ if (!user) {
   cleanSession(cookies)
   return redirect("/auth/login")
 }
-const { fullName, email } = user
+const { id: userId, fullName, email } = user
 const paymentAvailable = false
 ---
 
@@ -36,7 +36,7 @@ const paymentAvailable = false
             Información del cliente
             <span class="block text-base font-normal">Dirección entrega</span>
           </h2>
-          <form class="flex flex-col gap-4 max-w-md">
+          <form id="step-info" class="flex flex-col gap-4 max-w-md">
             <InputField
               label="Nombre y Apellidos"
               type="text"
@@ -58,13 +58,13 @@ const paymentAvailable = false
               placeholder="joseperez@gmail.com"
             />
             <div class="flex gap-3">
-              <InputField
+              <!-- <InputField
                 label="Dirección"
                 type="text"
                 id="address"
                 name="address"
                 placeholder="Cl. 100 #70 - 140"
-              />
+              /> -->
               <InputField
                 label="Teléfono"
                 type="tel"
@@ -90,7 +90,7 @@ const paymentAvailable = false
           </h2>
           {
             paymentAvailable && (
-              <form data-step="payment" class="flex flex-col gap-4 max-w-md hidden">
+              <form id="step-payment" class="flex flex-col gap-4 max-w-md hidden">
                 <InputField
                   label="Nombre del titular"
                   type="text"
@@ -133,12 +133,13 @@ const paymentAvailable = false
               </form>
             )
           }
-          <form data-step="payment" class="flex flex-col gap-4 max-w-md hidden">
+          <form id="step-payment" class="flex flex-col gap-4 max-w-md hidden">
+            <input type="hidden" name="userId" value={userId} />
             <div class="text-neutral-600 text-pretty">
               <p>Actualmente aceptamos pagos en persona en nuestra tienda.</p>
               <p>Acércate a nuestra tienda para realizar tu pago.</p>
             </div>
-            <Button type="button">Reservar</Button>
+            <Button type="submit">Reservar</Button>
           </form>
         </article>
       </div>
@@ -168,7 +169,7 @@ const paymentAvailable = false
 </Layout>
 
 <script>
-  import { getSubtotal } from "@lib/cart"
+  import { getCart, getSubtotal, clearCart } from "@lib/cart"
 
   const nextStepButton = document.getElementById("next-step")!
   nextStepButton.addEventListener("click", ev => {
@@ -176,7 +177,7 @@ const paymentAvailable = false
     if (parentForm.checkValidity()) {
       ev.preventDefault()
       const step = nextStepButton.getAttribute("data-step")
-      const form = document.querySelector(`form[data-step="${step}"]`) as HTMLFormElement
+      const form = document.querySelector(`form#step-${step}`) as HTMLFormElement
       if (form) {
         form.classList.remove("hidden")
         form.scrollIntoView({ behavior: "smooth" })
@@ -185,22 +186,90 @@ const paymentAvailable = false
     }
   })
 
-  const paymentButton = document.querySelector("form[data-step='payment'] button")!
-  paymentButton.addEventListener("click", () => {
+  const userInfoForm = document.querySelector("form#step-info")! as HTMLFormElement
+  const paymentForm = document.querySelector("form#step-payment")! as HTMLFormElement
+  paymentForm.addEventListener("submit", placeOrder)
+
+  async function placeOrder(ev: SubmitEvent) {
+    ev.preventDefault()
+    const userData = new FormData(userInfoForm)
+    const paymentData = new FormData(paymentForm)
+
+    const fullName = userData.get("fullName")
+    const email = userData.get("email")
+    const phone = userData.get("phone")
+
+    const userId = paymentData.get("userId")
+    // const cardName = paymentData.get("cardName")
+    // const cardNumber = paymentData.get("cardNumber")
+    // const cardExpiration = paymentData.get("cardExpiration")
+    // const cardCvv = paymentData.get("cardCvv")
+
+    if (!fullName || !email || !phone) {
+      return document.dispatchEvent(
+        new CustomEvent("show-toast", {
+          detail: "Por favor, completa todos los campos."
+        })
+      )
+    }
+
+    // if(!cardName || !cardNumber || !cardExpiration || !cardCvv) {
+    //   return document.dispatchEvent(
+    //     new CustomEvent("show-toast", {
+    //       detail: "Por favor, completa todos los campos."
+    //     })
+    //   )
+    // }
+
+    const userInfo = { fullName, email, phone }
+    // const paymentInfo = {
+    //   cardName,
+    //   cardNumber,
+    //   cardExpiration,
+    //   cardCvv
+    // }
+
+    const productsInCart = getCart().map(product => ({
+      id: product.id,
+      quantity: product.quantity
+    }))
+
+    const response = await fetch("/api/orders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        userId,
+        status: "reserved",
+        total: getSubtotal(),
+        productsInCart,
+        userInfo
+      })
+    })
+    if (!response.ok) {
+      return document.dispatchEvent(
+        new CustomEvent("show-toast", {
+          detail: "Ha ocurrido un error. Por favor, intenta de nuevo."
+        })
+      )
+    }
+
+    clearCart()
+  }
+
+  window.addEventListener("cart:cleared", () => {
     document.dispatchEvent(
       new CustomEvent("show-toast", {
         detail: "Tu pedido ha sido reservado. Acércate a nuestra tienda para realizar tu pago."
       })
     )
-  })
-
-  // redirect to home after show-toast event ends
-  document.addEventListener("show-toast", ev => {
     setTimeout(() => {
       location.href = "/account"
     }, 2500)
   })
 
+  // update subtotal on page load
   document.addEventListener("DOMContentLoaded", () => {
     const subtotal = getSubtotal()
     const subtotalElements = document.querySelectorAll("span[data-price]")
