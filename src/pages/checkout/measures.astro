@@ -1,10 +1,21 @@
 ---
 import Layout from "@layouts/Layout.astro"
 import CalculateMeasures from "@components/Measures"
-import { isUserSigned } from "@lib/auth"
+import { getUserInfo, isUserSigned, cleanSession } from "@lib/auth"
 
 const { cookies, redirect } = Astro
 if (!isUserSigned(cookies)) redirect("/auth/login")
+
+const user = await getUserInfo(cookies)
+if (!user) {
+  cleanSession(cookies)
+  return redirect("/auth/login")
+}
+
+const { id } = user
+if (!cookies.has("user-id")) {
+  cookies.set("user-id", id, { secure: true, path: "/" })
+}
 ---
 
 <Layout title="Tus Medidas">
