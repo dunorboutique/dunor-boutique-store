@@ -6,7 +6,7 @@ import preact from "@astrojs/preact"
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://www.dunorboutique.net/",
+  site: "https://www.dunor.boutique/",
   output: "server",
   adapter: vercel(),
   redirects: {
