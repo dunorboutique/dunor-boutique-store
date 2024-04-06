@@ -51,9 +51,17 @@ if (!Astro.cookies.has("user-cart")) {
               {product.name}
             </span>
             <span class="shrink-0 text-2xl xs:text-3xl text-neutral-600 font-normal">
-              {formatPrice(product.price)} COP
+              {formatPrice(product.stock_rent)} COP
             </span>
           </h1>
+          <h3 class="mt-4">
+            <span class="text-pretty">Precio de Alquiler Estreno:</span>
+            <span class="text-lg text-neutral-600 font-medium">{formatPrice(product.debut_rent)} COP</span>
+          </h3>
+          <h3>
+            <span class="text-pretty">Precio de Venta:</span>
+            <span class="text-lg text-neutral-600 font-medium">{formatPrice(product.price)} COP</span>
+          </h3>
         </div>
         <div class="mb-4 sm:mb-0 flex items-center gap-4">
           <button

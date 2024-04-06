@@ -8,6 +8,8 @@ export type User = {
 export type Product = {
   id: string
   name: string
+  stock_rent: number
+  debut_rent: number
   price: number
   image_url: string
   category: {
