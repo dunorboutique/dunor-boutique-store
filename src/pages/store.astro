@@ -1,10 +1,14 @@
 ---
 import { getAllProducts } from "@db/products"
-import { formatPrice } from "@lib/format"
 import Layout from "@layouts/Layout.astro"
 import CldImage from "@components/ui/CldImage.astro"
+import Products from "@components/Products.astro"
+import Sorting from "@components/Sorting.astro"
+import { sortedProductsByMethod } from "@lib/sorting"
 
+const sortMethod = Astro.url.searchParams.get("sort")
 const { products, error } = await getAllProducts()
+const sortedProducts = sortedProductsByMethod(sortMethod, products)
 ---
 
 <Layout title="Nuestros Productos" normalHeader>
@@ -19,47 +23,17 @@ const { products, error } = await getAllProducts()
         class="w-full aspect-[5/1] sm:aspect-[8/1] md:aspect-[10/1] max-h-[170px] object-cover object-center sm:object-left-bottom"
       />
       <div class="flex flex-col py-4 gap-2">
-        <h1 id="page-title" class="px-6 sm:px-8 w-full bg-white text-4xl">
-          Colección Completa
-        </h1>
-      </div>
-      <div class="flex items-center justify-end gap-2 pr-8 text-neutral-500">
-        <button type="button" title="List View">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8">
-            <use xlink:href="/icons/filters.svg#list"></use>
-          </svg>
-        </button>
-        <button type="button" title="Grid View">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8">
-            <use xlink:href="/icons/filters.svg#grid"></use>
-          </svg>
-        </button>
+        <h1 id="page-title" class="px-6 sm:px-8 w-full bg-white text-4xl">Colección Completa</h1>
+        <p class="px-6 sm:px-8 w-full text-lg text-neutral-500">
+          Encuentra el traje perfecto para tu evento especial. Todos nuestros trajes están hechos
+          con los mejores materiales y con la mejor calidad.
+        </p>
+        <Sorting />
       </div>
     </header>
     <div class="flex flex-col md:flex-row gap-12 px-6 sm:px-8 w-full">
-      <section class="grow products-grid text-justify">
-        {
-          products?.map(({ id, name, price, image_url }) => {
-            const normalizedName = name.toLowerCase().replace(/\s/g, "_")
-            return (
-              <a href={`/trajes/${id}-${normalizedName}`} class="w-full max-w-72">
-                <article class="w-full">
-                  <CldImage
-                    width={400}
-                    height={536}
-                    alt={name}
-                    src={image_url}
-                    class="w-full h-96 object-cover"
-                  />
-                  <header class="pt-2.5 px-2">
-                    <h2 class="text-lg">{name}</h2>
-                    <p class="text-neutral-500">{formatPrice(price)} COP</p>
-                  </header>
-                </article>
-              </a>
-            )
-          })
-        }
+      <section id="products" class="grow products-grid">
+        {products && <Products products={sortedProducts} />}
         {
           error && (
             <div class="flex items-center justify-center w-full h-96">

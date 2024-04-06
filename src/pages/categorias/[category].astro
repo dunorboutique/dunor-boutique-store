@@ -1,12 +1,18 @@
 ---
 import { getProductsByCategory } from "@db/products"
-import { formatPrice, capitalizeText } from "@lib/format"
+import { capitalizeText } from "@lib/format"
 import Layout from "@layouts/Layout.astro"
 import CldImage from "@components/ui/CldImage.astro"
+import Products from "@components/Products.astro"
+import Sorting from "@components/Sorting.astro"
+import { sortedProductsByMethod } from "@lib/sorting"
 
 const { category } = Astro.params as { category: string }
 const { products, error } = await getProductsByCategory(category)
 const capitalizedTitle = capitalizeText(category)
+
+const sortMethod = Astro.url.searchParams.get("sort")
+const sortedProducts = sortedProductsByMethod(sortMethod, products)
 ---
 
 <Layout title={capitalizedTitle} normalHeader>
@@ -27,44 +33,12 @@ const capitalizedTitle = capitalizeText(category)
         <p class="px-6 sm:px-8 text-neutral-500 text-lg leading-tight">
           Selecciona uno de nuestros diseños para {capitalizedTitle}.
         </p>
-      </div>
-      <div class="flex items-center justify-end gap-2 pr-8 text-neutral-500">
-        <button type="button" title="List View">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8">
-            <use xlink:href="/icons/filters.svg#list"></use>
-          </svg>
-        </button>
-        <button type="button" title="Grid View">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8">
-            <use xlink:href="/icons/filters.svg#grid"></use>
-          </svg>
-        </button>
+        <Sorting />
       </div>
     </header>
     <div class="flex flex-col md:flex-row gap-32 px-6 sm:px-10 w-full">
-      <section class="grow products-grid text-justify">
-        {
-          products?.map(({ id, name, price, image_url }) => {
-            const normalizedName = name.toLowerCase().replace(/\s/g, "_")
-            return (
-              <a href={`/trajes/${id}-${normalizedName}`} class="w-full max-w-72">
-                <article class="w-full">
-                  <CldImage
-                    width={400}
-                    height={536}
-                    alt={name}
-                    src={image_url}
-                    class="w-full h-96 object-cover"
-                  />
-                  <header class="pt-2.5 px-2">
-                    <h2 class="text-lg">{name}</h2>
-                    <p class="text-neutral-500">{formatPrice(price)} COP</p>
-                  </header>
-                </article>
-              </a>
-            )
-          })
-        }
+      <section class="grow products-grid">
+        {products && <Products products={sortedProducts} />}
         {
           error && (
             <div class="flex items-center justify-center w-full h-96">
@@ -81,7 +55,7 @@ const capitalizedTitle = capitalizeText(category)
 <style>
   .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
     gap: 2.5rem 1.5rem;
   }
 </style>
