@@ -11,22 +11,22 @@ export function SubTotal() {
   })
 
   return (
-    <span class="text-neutral-500">
+    <span className="text-neutral-500">
       {cartSubtotal ? formatPrice(cartSubtotal) : 0}
-      <span class="text-sm">COP</span>
+      <span className="text-sm">COP</span>
     </span>
   )
 }
 
 export function ShippingCost({ shippingCost }: { shippingCost: number }) {
   return (
-    <p class="flex justify-between">
+    <p className="flex justify-between">
       Gastos de envío:
       {shippingCost === 0 ? (
-        <span class="text-green-600 font-medium">¡GRATIS!</span>
+        <span className="text-green-600 font-medium">¡GRATIS!</span>
       ) : (
         <span>
-          ${formatPrice(shippingCost)} <span class="text-sm">COP</span>
+          ${formatPrice(shippingCost)} <span className="text-sm">COP</span>
         </span>
       )}
     </p>
@@ -41,9 +41,9 @@ export function TotalPayment({ shippingCost }: { shippingCost: number }) {
   })
 
   return (
-    <span class="text-neutral-500">
+    <span className="text-neutral-500">
       {cartTotal ? formatPrice(cartTotal) : 0}
-      <span class="text-sm">COP</span>
+      <span className="text-sm">COP</span>
     </span>
   )
 }

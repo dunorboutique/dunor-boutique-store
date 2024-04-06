@@ -11,7 +11,7 @@ interface FormFieldProps {
   className?: string
   placeholder?: string
   description?: string
-  children?: preact.ComponentChildren
+  children?: React.ReactNode
 }
 
 export function FormField({
@@ -28,12 +28,12 @@ export function FormField({
   children
 }: FormFieldProps) {
   return (
-    <label class="flex flex-col gap-2 w-full">
-      <span class="text-lg font-medium">{label}</span>
+    <label className="flex flex-col gap-2 w-full">
+      <span className="text-lg font-medium">{label}</span>
       {type === "select" ? (
         <select
           name={name}
-          class="block px-3 py-2 w-full bg-white border rounded-md border-neutral-300 placeholder-neutral-500 focus-visible:outline-none focus-visible:ring-dunor-gold focus-visible:ring-4 transition-shadow"
+          className="block px-3 py-2 w-full bg-white border rounded-md border-neutral-300 placeholder-neutral-500 focus-visible:outline-none focus-visible:ring-dunor-gold focus-visible:ring-4 transition-shadow"
           required
         >
           <option value="">-- Selecciona una opción --</option>

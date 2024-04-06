@@ -97,7 +97,7 @@ export function UserMeasures({ measurement }: { measurement: BodygramResponse })
           )
         })}
       </div>
-      <div class="flex flex-wrap items-center gap-5 mx-auto">
+      <div className="flex flex-wrap items-center gap-5 mx-auto">
         {/* <button
           onClick={onEditMeasures}
           class="shrink-0 py-3 px-6 w-fit border-2 border-dunor-black rounded-md text-dunor-black hover:scale-105 transition-transform"
@@ -106,7 +106,7 @@ export function UserMeasures({ measurement }: { measurement: BodygramResponse })
         </button> */}
         <button
           onClick={onConfirmedMeasures}
-          class="shrink-0 py-3 px-6 w-fit bg-dunor-black border-2 border-dunor-black rounded-md text-white hover:scale-105 transition-transform"
+          className="shrink-0 py-3 px-6 w-fit bg-dunor-black border-2 border-dunor-black rounded-md text-white hover:scale-105 transition-transform"
         >
           Confirmar medidas
         </button>

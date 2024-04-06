@@ -14,16 +14,16 @@ export default function QuantityPicker({ productId, initialAmount }: QuantityPic
   }, [quantity])
 
   return (
-    <div id="picker" class="flex gap-0.5 items-center">
+    <div id="picker" className="flex gap-0.5 items-center">
       <button
-        class="flex justify-center items-center size-5 bg-neutral-200 rounded-full text-base font-light"
+        className="flex justify-center items-center size-5 bg-neutral-200 rounded-full text-base font-light"
         onClick={() => setQuantity(quantity - 1)}
       >
         –
       </button>
-      <span class="shrink-0 size-5 text-center">{quantity}</span>
+      <span className="shrink-0 size-5 text-center">{quantity}</span>
       <button
-        class="flex justify-center items-center size-5 bg-neutral-200 rounded-full text-xl font-light"
+        className="flex justify-center items-center size-5 bg-neutral-200 rounded-full text-xl font-light"
         onClick={() => setQuantity(quantity + 1)}
       >
         +

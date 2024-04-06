@@ -1,3 +1,4 @@
+import { type FormEvent } from "react"
 import { useMeasurement } from "@hooks"
 import { fileToBase64 } from "@lib/format"
 import { UserMeasures } from "@components/UserMeasures"
@@ -7,7 +8,7 @@ import { FormField } from "@ui/FormField"
 export default function CalculateMeasures() {
   const { measurement, isLoading, updateFetch } = useMeasurement()
 
-  async function onSubmit(event: SubmitEvent) {
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const form = event.currentTarget as HTMLFormElement
     const formData = new FormData(form).entries()

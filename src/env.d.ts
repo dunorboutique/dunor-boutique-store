@@ -9,6 +9,7 @@ interface ImportMetaEnv {
   readonly CLOUDINARY_API_SECRET: string
   readonly BODYGRAM_API_KEY: string
   readonly BODYGRAM_ORGANIZATION_ID: string
+  readonly RESEND_API_KEY: string
 }
 
 interface ImportMeta {
