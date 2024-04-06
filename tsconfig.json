@@ -1,19 +1,40 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "C:/Users/jesuf/CODE/dunor-boutique",
     "paths": {
-      "@components/*": ["./src/components/*"],
-      "@layouts/*": ["./src/layouts/*"],
-      "@lib/*": ["./src/lib/*"],
-      "@db/*": ["./src/db/*"],
-      "@ui/*": ["./src/components/ui/*"],
-      "@icons/*": ["./src/components/icons/*"],
-      "@hooks": ["./src/hooks/index.ts"],
-      "@consts": ["./src/consts.ts"],
-      "@types": ["./src/types.ts"]
+      "@components/*": [
+        "./src/components/*"
+      ],
+      "@layouts/*": [
+        "./src/layouts/*"
+      ],
+      "@lib/*": [
+        "./src/lib/*"
+      ],
+      "@db/*": [
+        "./src/db/*"
+      ],
+      "@emails/*": [
+        "./src/emails/*"
+      ],
+      "@ui/*": [
+        "./src/components/ui/*"
+      ],
+      "@icons/*": [
+        "./src/components/icons/*"
+      ],
+      "@hooks": [
+        "./src/hooks/index.ts"
+      ],
+      "@consts": [
+        "./src/consts.ts"
+      ],
+      "@types": [
+        "./src/types.ts"
+      ]
     },
     "jsx": "react-jsx",
-    "jsxImportSource": "preact"
+    "jsxImportSource": "react"
   },
   "extends": "astro/tsconfigs/strict"
 }

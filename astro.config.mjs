@@ -2,7 +2,7 @@ import { defineConfig } from "astro/config"
 import vercel from "@astrojs/vercel/serverless"
 import tailwind from "@astrojs/tailwind"
 import sitemap from "@astrojs/sitemap"
-import preact from "@astrojs/preact"
+import react from "@astrojs/react"
 
 // https://astro.build/config
 export default defineConfig({
@@ -12,5 +12,5 @@ export default defineConfig({
   redirects: {
     "/categories": "/"
   },
-  integrations: [tailwind(), sitemap(), preact()]
+  integrations: [tailwind(), sitemap(), react()]
 })
