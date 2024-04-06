@@ -1,4 +1,4 @@
-import { useState } from "preact/hooks"
+import { useState } from "react"
 import { useEvent } from "@hooks"
 import { getSubtotal } from "@lib/cart"
 import { formatPrice } from "@lib/format"

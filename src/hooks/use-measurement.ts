@@ -1,5 +1,5 @@
 import type { BodygramResponse } from "@types"
-import { useEffect } from "preact/hooks"
+import { useEffect } from "react"
 import { useLocalStorage, useFetch } from "@hooks"
 
 export function useMeasurement() {

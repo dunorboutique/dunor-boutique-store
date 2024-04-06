@@ -1,4 +1,4 @@
-import { useEffect, useState } from "preact/hooks"
+import { useEffect, useState } from "react"
 
 export function useLocalStorage<T>(key: string, initialValue?: T): [T | null, (value: T) => void]{
   const [value, setValue] = useState<T | null>(() => {
