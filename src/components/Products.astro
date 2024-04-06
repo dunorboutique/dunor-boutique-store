@@ -1,0 +1,33 @@
+---
+import type { Product } from "@types"
+import { formatPrice } from "@lib/format"
+import CldImage from "@components/ui/CldImage.astro"
+
+type Props = {
+  products: Product[]
+}
+const { products } = Astro.props as Props
+---
+
+{
+  products?.map(({ id, name, stock_rent, image_url }) => {
+    const normalizedName = name.toLowerCase().replace(/\s/g, "_")
+    return (
+      <a href={`/trajes/${id}-${normalizedName}`} class="w-full max-w-72">
+        <article class="w-full">
+          <CldImage
+            width={400}
+            height={536}
+            alt={name}
+            src={image_url}
+            class="w-full h-96 object-cover"
+          />
+          <header class="pt-2.5 px-2">
+            <h2 class="text-lg">{name}</h2>
+            <p class="text-neutral-500">{formatPrice(stock_rent)} COP</p>
+          </header>
+        </article>
+      </a>
+    )
+  })
+}
