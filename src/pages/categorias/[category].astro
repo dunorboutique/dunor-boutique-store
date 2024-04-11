@@ -2,7 +2,6 @@
 import { getProductsByCategory } from "@db/products"
 import { capitalizeText } from "@lib/format"
 import Layout from "@layouts/Layout.astro"
-import CldImage from "@components/ui/CldImage.astro"
 import Products from "@components/Products.astro"
 import Sorting from "@components/Sorting.astro"
 import { sortedProductsByMethod } from "@lib/sorting"
@@ -17,15 +16,7 @@ const sortedProducts = sortedProductsByMethod(sortMethod, products)
 
 <Layout title={capitalizedTitle} normalHeader>
   <main class="grow flex flex-col gap-14 pb-32">
-    <header class="flex flex-col gap-2">
-      <CldImage
-        width={2400}
-        height={300}
-        quality="100"
-        alt="Several Models"
-        src="dunor/models_services"
-        class="w-full aspect-[5/1] sm:aspect-[8/1] md:aspect-[10/1] max-h-[170px] object-cover object-center sm:object-left-bottom"
-      />
+    <header class="flex flex-col gap-2 pt-10">
       <div class="flex flex-col py-4 gap-2">
         <h1 id="category-title" class="px-6 sm:px-8 w-full bg-white text-4xl">
           {capitalizedTitle}
