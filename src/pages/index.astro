@@ -68,11 +68,13 @@ const homeImages = imageNames.map((name, index) => {
 
     <!-- Home Section -->
     <section class="flex flex-col items-center gap-14 mt-12 py-4 px-6 md:px-14 w-full">
-      <div class="flex flex-col items-end w-fit font-display">
+      <a class="flex flex-col items-end w-fit font-display" href="/services">
         <h1 class="text-5xl sm:text-6xl xl:text-7xl italic uppercase">Nuestros</h1>
         <h2 class="pl-16 text-4xl sm:text-5xl xl:text-6xl font-bold">servicios</h2>
-      </div>
-      <CldImage src="dunor/models_services" alt="Several Models" width={1200} height={400} />
+      </a>
+      <a href="/services">
+        <CldImage src="dunor/models_services" alt="Several Models" width={1200} height={400} />
+      </a>
     </section>
   </main>
 </Layout>
