@@ -9,7 +9,8 @@ export default {
       },
       screens: {
         "2xs": "480px",
-        xs: "512px"
+        xs: "512px",
+        slg: "1088px",
       },
       fontSize: {
         "3.5xl": "2rem"

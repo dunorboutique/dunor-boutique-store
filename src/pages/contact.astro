@@ -9,9 +9,9 @@ const whatsappNumber = SITE_WHATSAPP
 ---
 
 <Layout title="Contacto">
-  <main class="grow flex flex-col items-center gap-10 py-12 px-4 w-full">
+  <main class="grow flex flex-col items-center gap-10 py-12 px-4 md:px-10 w-full">
     <h1 class="w-fit text-5xl font-medium">Contacto</h1>
-    <section class="flex flex-wrap gap-y-10 gap-x-32 w-full">
+    <section class="flex justify-between flex-wrap gap-y-10 gap-x-16 mx-auto w-full max-w-7xl">
       <iframe
         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.7328245543395!2d-74.78997312402113!3d10.983527889178111!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8ef42d641a0c0001%3A0x13e8b16dca7eff90!2sDunor%20Boutique!5e0!3m2!1ses!2sco!4v1708386326544!5m2!1ses!2sco"
         width="650"
@@ -19,39 +19,43 @@ const whatsappNumber = SITE_WHATSAPP
         allowfullscreen=""
         loading="lazy"
         referrerpolicy="no-referrer-when-downgrade"></iframe>
-      <article class="flex flex-col items-end gap-8 w-full text-xl text-right">
-        <div>
-          <h2 class="text-3xl font-bold">Dirección:</h2>
-          <address>Calle 47 #43-15, Local 2C Esquina</address>
-          <address>Barranquilla, Colombia</address>
-        </div>
+      <article
+        class="flex flex-col gap-8 items-end slg:mr-36 w-full slg:w-fit text-xl text-right"
+      >
+        <div class="flex flex-col justify-center gap-6 sm:flex-row slg:flex-col w-full">
+          <div>
+            <h2 class="text-3xl font-bold">Dirección:</h2>
+            <address class="sm:max-w-[16ch] slg:max-w-full text-pretty">Calle 47 #43-15, Local 2C Esquina</address>
+            <address class="sm:max-w-[16ch] slg:max-w-full text-pretty">Barranquilla, Colombia</address>
+          </div>
 
-        <div>
-          <h2 class="text-3xl font-bold">Horarios:</h2>
-          <p class="flex flex-col gap-1">
-            <span>Lunes a Viernes de 10 am a 7 pm</span>
-            <span>Sábados de 10 am a 5 pm</span>
-          </p>
-        </div>
+          <div>
+            <h2 class="text-3xl font-bold">Horarios:</h2>
+            <p class="flex flex-col gap-1 sm:max-w-[16ch] slg:max-w-full text-pretty">
+              <span>Lunes a Viernes de 10 am a 7 pm</span>
+              <span>Sábados de 10 am a 5 pm</span>
+            </p>
+          </div>
 
-        <div>
-          <h2 class="text-3xl font-bold">Teléfono:</h2>
-          <a href={`tel:+${telephoneNumber}`} title="Telephone Number" class="underline">
-            {formatPhoneNumber(telephoneNumber)}
-          </a>
-        </div>
+          <div>
+            <h2 class="text-3xl font-bold">Teléfono:</h2>
+            <a href={`tel:+${telephoneNumber}`} title="Telephone Number" class="underline">
+              {formatPhoneNumber(telephoneNumber)}
+            </a>
+          </div>
 
-        <div>
-          <h2 class="text-3xl font-bold">Whatsapp:</h2>
-          <a
-            href={SITE_SOCIAL_LINKS.whatsapp}
-            title="Whatsapp link"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="underline"
-          >
-            {formatPhoneNumber(whatsappNumber)}
-          </a>
+          <div>
+            <h2 class="text-3xl font-bold">Whatsapp:</h2>
+            <a
+              href={SITE_SOCIAL_LINKS.whatsapp}
+              title="Whatsapp link"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="underline"
+            >
+              {formatPhoneNumber(whatsappNumber)}
+            </a>
+          </div>
         </div>
         <Socials size="lg" />
       </article>
