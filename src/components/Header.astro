@@ -52,7 +52,7 @@ const { position = "sticky" } = Astro.props as Props
   <nav class="bg-gray-100 text-gray-500 text-sm font-semibold uppercase">
     <ul class="flex justify-between gap-8 mx-auto py-3 px-8 max-w-4xl overflow-x-auto">
       {
-        categories.map(({ name }) => {
+        categories?.map(({ name }) => {
           return (
             <li>
               <LinkButton href={`/categorias/${name}`}>{name}</LinkButton>
