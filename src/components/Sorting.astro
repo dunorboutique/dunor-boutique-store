@@ -2,29 +2,28 @@
 
 ---
 
-<form method="get" class="flex items-center justify-end gap-6 pr-8 text-neutral-500">
-  <div>
-    <button type="submit" name="sort" value="name-asc" title="Nombre Ascendente">
-      <svg xmlns="http://www.w3.org/2000/svg" class="p-1 w-12 h-12 rounded hover:bg-neutral-200">
-        <use xlink:href="/icons/filters.svg#name-asc"></use>
-      </svg>
-    </button>
-    <button type="submit" name="sort" value="name-desc" title="Nombre Descendente">
-      <svg xmlns="http://www.w3.org/2000/svg" class="p-1 w-12 h-12 rounded hover:bg-neutral-200">
-        <use xlink:href="/icons/filters.svg#name-desc"></use>
-      </svg>
-    </button>
-  </div>
-  <div>
-    <button type="submit" name="sort" value="price-asc" title="Precio Ascendente">
-      <svg xmlns="http://www.w3.org/2000/svg" class="p-1 w-12 h-12 rounded hover:bg-neutral-200">
-        <use xlink:href="/icons/filters.svg#price-asc"></use>
-      </svg>
-    </button>
-    <button type="submit" name="sort" value="price-desc" title="Precio Descendente">
-      <svg xmlns="http://www.w3.org/2000/svg" class="p-1 w-12 h-12 rounded hover:bg-neutral-200">
-        <use xlink:href="/icons/filters.svg#price-desc"></use>
-      </svg>
-    </button>
-  </div>
+<form method="get" id="sort-form" class="flex items-center gap-1 mt-5 text-neutral-600">
+  <label for="sort">Ordenar por</label>
+  <select
+    name="sort"
+    id="sort"
+    class="py-2 cursor-pointer focus-visible:outline-dashed focus-visible:outline-2 focus-visible:outline-neutral-500"
+  >
+    <option value="name-asc">Nombre Ascendente</option>
+    <option value="name-desc">Nombre Descendente</option>
+    <option value="price-asc">Menor Precio</option>
+    <option value="price-desc">Mayor Precio</option>
+  </select>
 </form>
+
+<script>
+  const form = document.getElementById("sort-form")! as HTMLFormElement
+  const sort = document.getElementById("sort")! as HTMLSelectElement
+  sort.addEventListener("input", () => form.submit())
+
+  window.addEventListener("load", () => {
+    const url = new URL(window.location.href)
+    const sortValue = url.searchParams.get("sort")
+    if (sortValue) sort.value = sortValue
+  })
+</script>
