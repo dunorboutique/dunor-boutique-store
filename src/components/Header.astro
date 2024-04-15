@@ -55,7 +55,7 @@ const { position = "sticky" } = Astro.props as Props
         categories?.map(({ name }) => {
           return (
             <li class="shrink-0">
-              <LinkButton href={`/categorias/${name}`}>{name}</LinkButton>
+              <LinkButton href={`/categorias/${name.replace(/ /g, "-")}`}>{name}</LinkButton>
             </li>
           )
         })

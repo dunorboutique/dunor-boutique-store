@@ -7,8 +7,8 @@ import Sorting from "@components/Sorting.astro"
 import { sortedProductsByMethod } from "@lib/sorting"
 
 const { category } = Astro.params as { category: string }
-const { products, error } = await getProductsByCategory(category)
-const capitalizedTitle = capitalizeText(category)
+const { products, error } = await getProductsByCategory(category.replace(/-/g, " "))
+const capitalizedTitle = capitalizeText(category.replace(/-/g, " "))
 
 const sortMethod = Astro.url.searchParams.get("sort")
 const sortedProducts = sortedProductsByMethod(sortMethod, products)
