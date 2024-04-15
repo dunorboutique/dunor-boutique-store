@@ -86,3 +86,23 @@ export type UserMeasure = {
     gender: string
   }
 }
+
+// Types for sending order email
+export type UserOrderData = {
+  fullName: string
+  email: string
+  phone: string
+  address: string
+}
+
+export type OrderData = {
+  id: string
+  total: number
+  created_at: string
+  products: {
+    name: string
+    price: number
+    quantity: number
+    image_url: string
+  }[]
+}
