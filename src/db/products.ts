@@ -1,5 +1,6 @@
 import type { Product } from "@types"
 import { supabase } from "@lib/supabase"
+import { getCategoryByName } from "./categories"
 
 export async function getAllProducts() {
   const { data, error } = await supabase.from("products").select()
@@ -7,10 +8,14 @@ export async function getAllProducts() {
 }
 
 export async function getProductsByCategory(category: string) {
+  const categoryData = await getCategoryByName(category)
+  if (!categoryData.length) return { products: null, error: { message: "Category not found" } }
+  
+  const categoryId = categoryData[0].id  
   const { data, error } = await supabase
     .from("products")
-    .select("*, category:categories!inner(name)")
-    .eq("category.name", category)
+    .select()
+    .contains("category_ids", [categoryId])
   return { products: data as Product[] | null, error }
 }
 
