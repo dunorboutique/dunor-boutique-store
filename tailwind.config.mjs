@@ -7,6 +7,9 @@ export default {
         "dunor-black": "#212121",
         "dunor-gold": "#bf9540"
       },
+      maxWidth: {
+        "9xl": "96rem"
+      },
       screens: {
         "2xs": "480px",
         xs: "512px",
