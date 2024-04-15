@@ -1,4 +1,9 @@
-export const capitalizeText = (text: string) => text.charAt(0).toUpperCase() + text.slice(1)
+export const capitalizeText = (text: string) =>
+  text
+    .split(/[\s|\(|\)]/g)
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ")
+    .trim()
 
 export const formatPrice = (price: number) =>
   new Intl.NumberFormat("es-CO", {
