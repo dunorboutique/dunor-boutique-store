@@ -1,3 +1,4 @@
+import type { UserOrderData, OrderData } from "@types"
 import {
   Html,
   Head,
@@ -16,28 +17,8 @@ import {
 import { formatDateTime, formatPrice, formatPhoneNumber } from "@lib/format"
 import { resolveImageURL } from "@lib/cloudinary"
 
-type UserData = {
-  fullName: string
-  email: string
-  phone: string
-  address: string
-}
-
-type OrderData = {
-  id: string
-  total: number
-  created_at: string
-  products: {
-    name: string
-    price: number
-    quantity: number
-    image_url: string
-  }[]
-}
-
-const BASE_URL =
-  process.env.NODE_ENV === "production" ? "https://www.dunor.boutique" : "http://localhost:4321"
-export function UserOrderEmail({ user, order }: { user: UserData; order: OrderData }) {
+const BASE_URL = "https://www.dunor.boutique"
+export function UserOrderEmail({ user, order }: { user: UserOrderData; order: OrderData }) {
   const shortenId = (orderId: string) => orderId.split("-")[0]
   const currentYear = new Date().getFullYear()
 
@@ -158,8 +139,8 @@ export function UserOrderEmail({ user, order }: { user: UserData; order: OrderDa
                     <Text className="m-0 text-neutral-500">Cantidad: {product.quantity}</Text>
                   </Column>
 
-                  <Column className="pr-5 w-24" align="right">
-                    <Text className="text-base font-medium">{formatPrice(product.price)}</Text>
+                  <Column className="pr-5 w-32" align="right">
+                    <Text className="text-base font-medium">Precio Renta: {formatPrice(product.price)}</Text>
                   </Column>
                 </Row>
               ))}
@@ -196,9 +177,9 @@ export function UserOrderEmail({ user, order }: { user: UserData; order: OrderDa
                 </Column>
               </Row>
             </Section>
-            <Text className="mt-5 space-x-5 text-center text-sm">
-              <Link href={`${BASE_URL}/account`}>Cuenta</Link>
-              <Link href={`${BASE_URL}/services`}>Servicios</Link>
+            <Text className="mt-5 text-center text-sm">
+              <Link href={`${BASE_URL}/account`} className="mr-4">Cuenta</Link>
+              <Link href={`${BASE_URL}/services`} className="mr-4">Servicios</Link>
               <Link href={`${BASE_URL}/contact`}>Contacto</Link>
             </Text>
             <Text className="text-center text-sm text-neutral-500">
