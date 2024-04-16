@@ -106,3 +106,14 @@ export type OrderData = {
     image_url: string
   }[]
 }
+
+export type UserOrderDetails = {
+  fullName: string
+  email: string
+  phone: string
+  address: string
+  cardName: string
+  cardNumber: string
+  cardExpiration: string
+  cardCvv: string
+}
