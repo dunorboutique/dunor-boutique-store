@@ -58,13 +58,13 @@ const paymentAvailable = false
               placeholder="joseperez@gmail.com"
             />
             <div class="flex gap-3">
-              <!-- <InputField
+              <InputField
                 label="Dirección"
                 type="text"
                 id="address"
                 name="address"
                 placeholder="Cl. 100 #70 - 140"
-              /> -->
+              />
               <InputField
                 label="Teléfono"
                 type="tel"
@@ -169,8 +169,12 @@ const paymentAvailable = false
 </Layout>
 
 <script>
+  import type { UserOrderDetails, Product } from "@types"
   import { getCart, getSubtotal, clearCart } from "@lib/cart"
+  import { getItem, setItem, removeItem } from "@lib/local-storage"
+  import { formatPrice } from "@lib/format"
 
+  // Handle opening of next form in payment process
   const nextStepButton = document.getElementById("next-step")!
   nextStepButton.addEventListener("click", ev => {
     const parentForm = nextStepButton.closest("form") as HTMLFormElement
@@ -190,6 +194,12 @@ const paymentAvailable = false
   const paymentForm = document.querySelector("form#step-payment")! as HTMLFormElement
   paymentForm.addEventListener("submit", placeOrder)
 
+  const userInfoInputs = userInfoForm.querySelectorAll("input")
+  const paymentInputs = paymentForm.querySelectorAll("input")
+  userInfoInputs.forEach(input => input.addEventListener("input", saveUserOrderDetails))
+  paymentInputs.forEach(input => input.addEventListener("input", saveUserOrderDetails))
+
+  // Handle placing an order
   async function placeOrder(ev: SubmitEvent) {
     ev.preventDefault()
     const userData = new FormData(userInfoForm)
@@ -198,6 +208,7 @@ const paymentAvailable = false
     const fullName = userData.get("fullName")
     const email = userData.get("email")
     const phone = userData.get("phone")
+    const address = userData.get("address")
 
     const userId = paymentData.get("userId")
     // const cardName = paymentData.get("cardName")
@@ -221,7 +232,7 @@ const paymentAvailable = false
     //   )
     // }
 
-    const userInfo = { fullName, email, phone }
+    const userInfo = { fullName, email, phone, address }
     // const paymentInfo = {
     //   cardName,
     //   cardNumber,
@@ -234,7 +245,7 @@ const paymentAvailable = false
       quantity: product.quantity
     }))
 
-    const response = await fetch("/api/orders", {
+    const orderResponse = await fetch("/api/orders", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -247,7 +258,7 @@ const paymentAvailable = false
         userInfo
       })
     })
-    if (!response.ok) {
+    if (!orderResponse.ok) {
       return document.dispatchEvent(
         new CustomEvent("show-toast", {
           detail: "Ha ocurrido un error. Por favor, intenta de nuevo."
@@ -255,24 +266,115 @@ const paymentAvailable = false
       )
     }
 
+    const orderData = await orderResponse.json()
+    if (!orderData)
+      return document.dispatchEvent(
+        new CustomEvent("show-toast", {
+          detail: "Ha ocurrido un error. Por favor, intenta de nuevo."
+        })
+      )
+
+    const productsIds = productsInCart.map(product => product.id)
+    const productsResponse = await fetchProducts(productsIds)
+    if (!productsResponse) return console.error("Error fetching products")
+
+    const emailResponse = await fetch("/api/send-order", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        user: userInfo,
+        order: {
+          id: orderData.id,
+          total: orderData.total,
+          created_at: orderData.created_at,
+          products: productsResponse.map(product => ({
+            name: product.name,
+            price: product.stock_rent,
+            quantity: productsInCart.find(p => p.id === product.id)?.quantity,
+            image_url: product.image_url
+          }))
+        }
+      })
+    })
+
+    if (!emailResponse.ok) return console.error("Error sending email", emailResponse.statusText)
     clearCart()
   }
 
+  // Handle clearing cart and redirecting to account page after order is placed
   window.addEventListener("cart:cleared", () => {
     document.dispatchEvent(
       new CustomEvent("show-toast", {
         detail: "Tu pedido ha sido reservado. Acércate a nuestra tienda para realizar tu pago."
       })
     )
+    removeItem("user-order-details")
+
     setTimeout(() => {
       location.href = "/account"
     }, 2500)
   })
 
-  // update subtotal on page load
+  // Update subtotal on page load
   document.addEventListener("DOMContentLoaded", () => {
+    laodSubTotalValue()
+    loadUserOrderDetails()
+  })
+
+  //Fetch products from the API
+  async function fetchProducts(productsIds: string[]) {
+    const response = await fetch("/api/products", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ productsIds })
+    })
+    if (!response.ok) return null
+    return response.json() as Promise<Product[]>
+  }
+
+  // Update subtotal on cart change
+  function laodSubTotalValue() {
     const subtotal = getSubtotal()
     const subtotalElements = document.querySelectorAll("span[data-price]")
-    subtotalElements.forEach(el => (el.textContent = `$ ${subtotal}COP`))
-  })
+    subtotalElements.forEach(el => (el.textContent = `${formatPrice(subtotal)} COP`))
+  }
+
+  // Load user order details from local storage
+  function loadUserOrderDetails() {
+    const userOrderDetails = getItem<UserOrderDetails>("user-order-details")
+    if (!userOrderDetails) return
+
+    const { fullName, email, phone, address } = userOrderDetails
+    const fullNameInput = document.getElementById("fullName") as HTMLInputElement
+    const emailInput = document.getElementById("email") as HTMLInputElement
+    const phoneInput = document.getElementById("phone") as HTMLInputElement
+    const addressInput = document.getElementById("address") as HTMLInputElement
+
+    fullNameInput.value = fullName
+    emailInput.value = email
+    phoneInput.value = phone
+    addressInput.value = address
+  }
+
+  // Save user order details to local storage
+  function saveUserOrderDetails() {
+    const userInfo = new FormData(userInfoForm)
+    const paymentInfo = new FormData(paymentForm)
+
+    const userOrderDetails = {
+      fullName: userInfo.get("fullName") as string,
+      email: userInfo.get("email") as string,
+      phone: userInfo.get("phone") as string,
+      address: userInfo.get("address") as string,
+      cardName: paymentInfo.get("cardName") as string,
+      cardNumber: paymentInfo.get("cardNumber") as string,
+      cardExpiration: paymentInfo.get("cardExpiration") as string,
+      cardCvv: paymentInfo.get("cardCvv") as string
+    }
+    setItem<UserOrderDetails>("user-order-details", userOrderDetails)
+  }
 </script>
