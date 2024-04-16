@@ -12,7 +12,7 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response(JSON.stringify("Status, Total and Products are required"), { status: 400 })
   }
 
-  const { error } = await createOrder({
+  const { order, error } = await createOrder({
     user_id,
     products_id_quantity: productsInCart,
     status,
@@ -21,5 +21,5 @@ export const POST: APIRoute = async ({ request }) => {
   if (error) {
     return new Response(JSON.stringify("Error al crear la compra"), { status: 500 })
   }
-  return new Response(JSON.stringify("Compra creada"), { status: 201 })
+  return new Response(JSON.stringify(order), { status: 200 })
 }
