@@ -22,7 +22,7 @@ if (!Astro.cookies.has("user-cart")) {
 
 <Layout title={product.name}>
   <input type="hidden" id="product-id" value={product.id} />
-  <input type="hidden" id="product-price" value={product.price} />
+  <input type="hidden" id="product-price" value={product.stock_rent} />
   <main class="grow flex flex-col gap-14 pt-8 pb-32 px-6 xs:px-10">
     <section
       class="flex flex-col md:flex-row justify-between gap-10 mx-auto w-full max-w-screen-2xl"
