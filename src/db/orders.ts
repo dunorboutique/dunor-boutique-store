@@ -26,6 +26,6 @@ export async function getOrderById(id: string) {
 }
 
 export async function createOrder(order: OrderCreate) {
-  const { data, error } = await supabase.from("orders").insert([order])
-  return { order: data as Order | null, error }
+  const { data, error } = await supabase.from("orders").insert([order]).select()
+  return { order: data?.[0] as Order | null, error }
 }
