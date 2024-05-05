@@ -30,7 +30,7 @@ const shortenId = (orderId: string) => orderId.split("-")[0]
         <h2 class="text-xl font-medium">Productos</h2>
         <ul class="space-y-4">
           {
-            order?.products.map(({ name, price, image_url, quantity }) => {
+            order?.products.map(({ name, stock_rent, image_url, quantity }) => {
               return (
                 <li class="flex space-x-4">
                   <CldImage
@@ -43,7 +43,10 @@ const shortenId = (orderId: string) => orderId.split("-")[0]
                   <div>
                     <h3 class="text-lg">{name}</h3>
                     <p class="text-sm text-gray-600">
-                      Cantidad: {quantity} x {formatPrice(price)}
+                      Cantidad: {quantity}
+                    </p>
+                    <p class="text-sm text-gray-600">
+                      Precio Renta: {formatPrice(stock_rent)}
                     </p>
                   </div>
                 </li>
