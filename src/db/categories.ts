@@ -13,3 +13,11 @@ export async function getCategoryByName(name: string) {
     .eq("name", name)
   return data as Category[]
 }
+
+export async function getSubcategoryByName(name: string) {
+  const { data } = await supabase
+    .from("subcategories")
+    .select("id, name")
+    .eq("name", name)
+  return data as Category[]
+}
