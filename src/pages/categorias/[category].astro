@@ -1,40 +1,41 @@
 ---
-import { getProductsByCategory } from "@db/products"
+import { getProductsByType } from "@db/products"
 import { capitalizeText } from "@lib/format"
 import Layout from "@layouts/Layout.astro"
 import Products from "@components/Products.astro"
 import Sorting from "@components/Sorting.astro"
+import GroupBy from "@components/GroupBy.astro"
 import { sortedProductsByMethod } from "@lib/sorting"
 
 const { category } = Astro.params as { category: string }
-const { products, error } = await getProductsByCategory(category.replace(/-/g, " "))
+const { products, error } = await getProductsByType("category", category.replace(/-/g, " "))
 const capitalizedTitle = capitalizeText(category.replace(/-/g, " "))
 
 const sortMethod = Astro.url.searchParams.get("sort")
+const groupMethod = Astro.url.searchParams.get("group-by")
 const sortedProducts = sortedProductsByMethod(sortMethod, products)
 ---
 
 <Layout title={capitalizedTitle} normalHeader>
   <main class="grow flex flex-col gap-14 pb-32">
-    <header class="flex flex-col gap-2 pt-10">
-      <div class="flex flex-col py-4 px-6 sm:px-8 gap-2">
-        <h1 id="category-title" class="w-full bg-white text-4xl">
-          {capitalizedTitle}
-        </h1>
-        <p class="text-neutral-500 text-lg leading-tight">
-          Selecciona uno de nuestros diseños para {capitalizedTitle}.
-        </p>
-        <Sorting />
-      </div>
+    <header class="flex flex-wrap justify-between gap-4 pt-2 px-4 sm:px-10">
+      <Sorting />
+      <GroupBy />
     </header>
-    <div class="flex flex-col md:flex-row gap-32 px-6 sm:px-10 w-full">
-      <section class="grow relative products-grid">
+    <div
+      class={`flex flex-col md:flex-row gap-32 px-2 w-full ${groupMethod === "column" && "column-view"}`}
+    >
+      <section
+        class={`grow relative gap-y-6 gap-x-0.5 ${
+          groupMethod === "column" ? "grid grid-cols-2" : "products-grid"
+        }`}
+      >
         {products && <Products products={sortedProducts} />}
         {
           error && (
             <div class="absolute flex flex-col gap-4 items-center justify-center w-full">
               <h1 class="text-3xl text-red-700">Hubo un error al cargar los productos</h1>
-              <p class="text-lg text-neutral-600">{error.message}</p>
+              <p class="text-lg text-neutral-500">Por favor, intenta recargar la página.</p>
             </div>
           )
         }
@@ -44,22 +45,18 @@ const sortedProducts = sortedProductsByMethod(sortMethod, products)
 </Layout>
 
 <style>
+  .column-view {
+    padding-inline: 4rem;
+  }
+
   .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
-    gap: 2.5rem 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+  }
+
+  @media screen and (min-width: 768px) {
+    .products-grid {
+      grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
+    }
   }
 </style>
-
-<script>
-  const title = document.getElementById("category-title")!
-  const sticky = title.offsetTop
-
-  window.addEventListener("scroll", () => {
-    if (window.scrollY > sticky) {
-      title.classList.add("fixed", "top-0", "z-20", "py-3", "border-b")
-    } else {
-      title.classList.remove("fixed", "top-0", "z-20", "py-3", "border-b")
-    }
-  })
-</script>
