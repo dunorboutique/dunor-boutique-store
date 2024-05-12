@@ -1,0 +1,57 @@
+<form
+  method="get"
+  id="group-form"
+  class="flex items-center justify-end gap-2 text-neutral-400"
+>
+  <label class="pr-1 text-neutral-600">Vista</label>
+  <div title="Columnas" data-group="column" class="relative rounded-md hover:bg-neutral-200">
+    <input
+      class="group-by absolute w-full h-full appearance-none cursor-pointer"
+      type="radio"
+      name="group-by"
+      value="column"
+    />
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 z-10">
+      <use xlink:href="/icons/filters.svg#column"></use>
+    </svg>
+  </div>
+  <div title="Grilla" data-group="grid" class="relative rounded-md hover:bg-neutral-200">
+    <input
+      class="group-by absolute w-full h-full appearance-none cursor-pointer"
+      type="radio"
+      name="group-by"
+      value="grid"
+    />
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8">
+      <use xlink:href="/icons/filters.svg#grid"></use>
+    </svg>
+  </div>
+  <button id="submitButton" type="submit" class="hidden"></button>
+</form>
+
+<script>
+  const groupForm = document.getElementById("group-form")! as HTMLFormElement
+  const groupInputs = document.getElementsByClassName("group-by")
+  const submitButton = document.getElementById("submitButton")! as HTMLButtonElement
+
+  Array.from(groupInputs).forEach(input => {
+    input.addEventListener("change", () => submitButton.click())
+  })
+
+  groupForm.addEventListener("submit", event => {
+    event.preventDefault()
+    const url = new URL(window.location.href)
+    const formData = new FormData(event.target as HTMLFormElement)
+
+    const groupValue = formData.get("group-by") as string
+    url.searchParams.set("group-by", groupValue)
+    window.location.href = url.toString()
+  })
+
+  window.addEventListener("load", () => {
+    const url = new URL(window.location.href)
+    const groupValue = url.searchParams.get("group-by") ?? "grid"
+    const groupIcon = document.querySelector(`[data-group="${groupValue}"]`) as HTMLInputElement
+    groupIcon.style.color = "#212121"
+  })
+</script>
