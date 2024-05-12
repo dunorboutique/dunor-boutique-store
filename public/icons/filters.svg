@@ -1,13 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg">
-  <symbol id="list" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="currentColor">
-    <path d="M2 2 h18 v7 h-18 z" />
-    <path d="M2 13 h18 v7 h-18 z" />
+  <symbol id="column" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none">
+    <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
+    <path d="M12 4l0 16" />
   </symbol>
-  <symbol id="grid" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="currentColor">
-    <path d="M2 2 h7 v7 h-7 z"></path>
-    <path d="M13 2 h7 v7 h-7 z"></path>
-    <path d="M2 13 h7 v7 h-7 z"></path>
-    <path d="M13 13 h7 v7 h-7 z"></path>
+  <symbol id="grid" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none">
+    <path d="M4 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" />
+    <path d="M14 4m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" />
+    <path d="M4 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" />
+    <path d="M14 14m0 1a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1z" />
   </symbol>
   <symbol id="name-asc" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none">
     <path d="M15 10v-5c0 -1.38 .62 -2 2 -2s2 .62 2 2v5m0 -3h-4" />
